@@ -1,0 +1,78 @@
+In this section, we first give an instantiation of weak CCA tag-based encryption based on SXDH assumption,
+then combined with a linearly homomorphic signature scheme,
+we can construct a partially randomizable RCCA encryption scheme.
+
+\begin{subsection}{Tag based-encryption}
+
+	In this section, we first describe a tag based-encryption which is selective-ID CCA1 tag-based encryption scheme. The construction of this scheme is proposed by Cash \etal~\cite{DBLP:journals/joc/CashKS09} in the form of an public key encryption scheme.
+
+	\begin{description}
+
+	\item[$\boldmath{\Setup(1^\lambda)}$] :
+	\begin{enumerate}
+		\item Choose a group $\G$ of prime order $p$ in which the DDH problem is hard and choose randomly a group generator $g \sample \G$.
+		\item Generate three random values $(x_1, \tilde{x}_1, x_2) \sample \mathbb{Z}_p^3$.
+		\item Compute $X_1
+		 \gets g^{x_1}$, $\tilde{X}_1 \gets g^{\tilde{x}_1}$.
+		\item Set $\PPP \gets (g, \G)$
+		\item Compute $\PK \gets (X_1, \tilde{X}_1, X_2)$ and $\SK \gets (x_1, \tilde{x}_1, x_2)$
+	\end{enumerate}
+	
+	\item[$\boldmath{\Enc(\PPP, \PK, m, \tau)}$]: where $m \in \G$ and $\tau \in \mathbb{Z}_p$
+	\begin{enumerate}
+	\item Generate a random value $r \sample \mathbb{Z}_p$.
+	\item Compute 
+	\begin{align}
+	R &= g^r, & Z &= (X_1^\tau \tilde{X}_1)^r & C &= X_2^r \cdot m
+	\end{align}
+	\item Output the cipher-text $\vec{C} = (R, Z, C) \in \G^3$.
+
+	\end{enumerate}
+
+	\item[$\boldmath{\Dec(\PPP, \SK, \vec{C}, \tau)}$]: where $\vec{C} \in \G^3$
+	\begin{enumerate}
+	\item Parse $\vec{C}$ as $(R, Z, C)$ and $\SK$ as $(x_1, \tilde{x}_1, x_2)$.
+	\item Verify that  if $Y^{x_1 \tau + \tilde{x}_1} = Z$.
+	\item If not reject, otherwise, compute:
+	\begin{align}
+	m &= C/ R^{x_2}
+	\end{align}
+	\item Output the message $m$.
+	\end{enumerate}
+	
+\end{description}
+
+\end{subsection}
+
+\begin{subsection}{Combine the tag-based encryption with the Linearly Homomorphic Structure-Preserving Signature(LHSPS)}
+
+	In this section, we follow the general idea of construction CCA2 security encryption from a selective-tag based CCA1 encryption scheme.
+	To achieve the partially randomization property, we use the LHSPS in the construction of our public key encryption scheme.
+	
+	We present our construction for the partially randomizable encryption scheme as following:
+	
+	\begin{description}
+	\item[$\boldmath{RCCA1.\Setup(1^\lambda)}$]:
+		\begin{enumerate}
+		\item Generate the public parameters for the LHSPS scheme $\PPP_{LHSPS} \gets LHSPS.\Setup(1^\lambda, \ell = 4)$. Where $\ell$ presents the length of the message will be signed.
+		\item Generate the public parameters for the tag-based encryption scheme $\PPP_{TBE} \gets TBE.\Setup(1^\lambda)$.
+		\item Generate a collision resistant hash function $H : \hat{\G}^4 \to \mathbb{Z}_p$. 
+		\item Output the public parameter $\PPP \gets (\PPP_{LHSPS}, \PPP_{TBE})$
+		\end{enumerate}
+		
+	\item[$\boldmath{RCCA1.\KeyGen(\PPP)}$]:
+		\begin{enumerate}
+		\item Parse $\PPP$ as $(\PPP_{LHSPS}, \PPP_{TBE})$.
+		\item Using $\PPP_{TBE}$ to generate the public keys and secret keys $(\PK, \SK) \gets TBE.\KeyGen(\PPP_{TBE})$ of the underlying tag-based encryption scheme.
+		\end{enumerate}
+		
+	\item[$\boldmath{RCCA1.\KeyGen(\PPP)}$]:
+		\begin{enumerate}
+		\item Generate the signing key-verification key pair for the underlying signature scheme 
+		$$(\SSK, \SVK) \gets LHSPS. \KeyGen(\PPP_{LHSPS}) \in (\mathbb{Z}_p^8 \times \G^4).$$
+		\item Hash the verification key of the underlying signature scheme $\tau \gets H(\SVK)$.
+		\item Generate the encryption of the message $m$ of the underlying tag-based encryption scheme $\vec{C} \gets TBE.\Enc()$
+		\end{enumerate}
+		
+	\end{description}
+\end{subsection}

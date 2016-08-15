@@ -1,0 +1,323 @@
+\begin{section}{Instantiation of the trapdoor commitment scheme} \label{trap-com}
+  \begin{description}
+  \item[\boldmath{$TC.\Setup(1^{\lambda},\ell)$}]: Generate the public parameters for the trapdoor commitment scheme for security parameter $\lambda$ and message vector length $\ell$. 
+    \begin{enumerate}
+    \item Choose a random prime $p< 2^{\lambda}$.
+    \item Generate a asymmetric pairing groups $(\G, \hat{\G}, \G_T)$ of prime order $p$ and a pairing function $e : \G \times \hat{\G} \to \G_T$.
+    \item Generate the group generators $(g, \hat{g}) \in \G \times \hat{\G}$.	
+    \item $\PPP = (p, \G, \hat{\G}, \G_T, e, g, \hat{g},\ell)$.
+    \end{enumerate}
+
+  \item[\boldmath{$TC.\KeyGen(\PPP)$}]:
+    \begin{enumerate}
+    \item For $i = 1, \dots, \ell+2$, generate random values $\rho_i \sample \mathbb{Z}_p^*$, then compute $\hat{X}_i \gets \hat{g}^{\rho_i}$.
+    \item Set $\ck \gets \{\hat{X}_i\}_{i = 1}^{\ell+2}$ and $tk \gets \{\rho_i\}_i^{\ell+2}$.
+    \end{enumerate}
+
+
+  \item[\boldmath{$TC.\Com(\PPP, \ck, \vec{M})$}]: where $\vec{\hat{M}} = (\hat{M}_1, \dots, \hat{M}_\ell) \in \hat{\G}^\ell$.
+    \begin{enumerate}
+    \item Choose a random value $w_z \in \mathbb{Z}_p^*$ then compute $g_z = g^{w_z}$.
+    \item For $i = 1, \dots, \ell$, generate random values $\chi_i \sample \mathbb{Z}_p$ and compute $g_i = g^{\chi_i}$.
+    \item Set $\vk_{pots} \gets (g_z, g_1, \dots, g_\ell) \in \G^{\ell+1}$ and $\sk_{pots} \gets (w_z,\chi_1, \dots, \chi_\ell)$.
+    \item Choose randomly $a \sample \mathbb{Z}_p$, then set $\ovk_{pots} =A = g^{a}$ and $\osk_{pots} = a$.
+    \item Using the signing key $\sk_{pots}$ to generate signatures of the message $\vec{\hat{M}}$ \wrt to the one-time signature's secret key $\osk_{pots}$:
+    	\begin{enumerate}
+		\item Generate random value $\zeta_1 \in \mathbb{Z}_p$
+		\item Compute the signature $(\hat{Z}, \hat{R}) \in \hat{\G}^2$ for $\vec{\hat{M}}$:
+		\begin{align*}
+			\hat{Z} &= \hat{g}^{\zeta_1} & \hat{R} = \hat{g}^{a-\zeta_1 w_z}\prod_{i=1}^{\ell} \hat{M}_i^{\chi_i} 
+		\end{align*}
+		\end{enumerate}
+	\item We use the commitment key to generate the commitment for the message.
+		\begin{enumerate}
+		\item Set $(m_1, \dots, m_{\ell+2}) \gets (\chi_1, \dots, \chi_\ell, w_z, a)$ 
+		\item Parse $\vec{\ck}$ as $(\hat{X}_1, \dots, \hat{X}_{\ell+2})$.
+		\item Generate a random value $\zeta_2 \gets \mathbb{Z}_p^*$ and compute:
+		\begin{align*}
+		\hat{C} &= \hat{g}^{\zeta_2}\prod_{i = 1}^{\ell+2}\hat{X}_i^{m_i} & D &= g^{\zeta_2}
+		\end{align*}
+		\end{enumerate}
+	\item We set the commitment as $\com  = \hat{C}$ and $\open = (D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R}) \in \G^{\ell+3} \times \hat{\G}^{2}$.
+	\end{enumerate}
+	
+	\item[\boldmath{$TC.\Verif(\ck, \com, \vec{\hat{M}}, \open)$}] :
+		\begin{enumerate}
+		\item Parse $\vec{\hat{M}}$ with $(\hat{M}_1, \dots, \hat{M}_\ell)$ and $\open$ with $(D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R})$.
+		\item Set $\vec{N} = (N_1, \dots, N_{\ell+2}) = (g_1, \dots, g_\ell, g_z, \ovk_{pots})$
+		\item Using $\ovk_{pots} = A \in \G$, verify the following equations:
+		\begin{align*}
+			e(g, \hat{C}) &= e(D, \hat{g}) \prod_{i = 1}^{\ell+2} e(N_i, \hat{X}_i) & e(A, \hat{g}) &= e(g_z, \hat{Z}) \cdot e(g, \hat{R}) \cdot \prod_{i = 1}^\ell e(g_i, \hat{M}_i) 
+		\end{align*}
+		\end{enumerate}
+  \end{description}
+\end{section}
+
+
+\begin{section}{Using the trapdoor commitment scheme to construct more efficient structure preserving publicly verifiable CCA-2 encryption scheme}
+	
+	In this section, we use the previous trapdoor commitment scheme to commit the verification key, as they are constructed to verify so called CMTCR (Chosen-Message Target Collision Resistant) property, this will leads us to a wanted CCA-2 encryption scheme.
+	    \begin{description}
+
+    \item[\boldmath{$SPCCA.\KeyGen(1^\lambda)$}]:
+      \begin{enumerate}
+      \item Choose a asymmetric pairing group system $(\G, \hat{\G}, \G_T)$, groups of prime order $p > 2^\lambda$.
+      \item Set $\PPP$ as $(\G, \hat{\G}, \G_T)$.
+      \item Choose also group generators $g_1, g_2 \sample \G$ and random values $x_1, x_2 \sample \mathbb{Z}_p$.
+      \item Generate group generator $\hat{g} \sample \hat{\G}$
+      \item Set $X = g_1^{x_1}g_2^{x_2}$.
+      \item Choose random values $\rho_u,\rho_u' \sample \Z_p$ and random group generators $(\hat{g}, \hat{h}) \sample \hat{\G}^2$.
+      \item Set $(\vec{u}_1, \vec{u}_2)$ as $\vec{u}_1 = (\hat{g}, \hat{h}) \in \hat{\G}^2$ and $\vec{u}_2 =  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2$. Note that $\vec{u}_1$ and $\vec{u}_2$ are linearly independent with overwhelming probability.
+      \item Set $\PPP_{TC} = (\PPP, g_1, \hat{g}, \ell = 6)$.
+      \item Generate the commitment key $\vec{\ck} \in \hat{\G}^8$ and $\vec{\tk} \in \mathbb{Z}_p^8$
+      \item Define $\SK = (x_1, x_2)$ and $\PK = (g_1, g_2, \vec{u}_1, \vec{u}_2, X, \PPP_{TC}, \vec{\ck})$
+      \end{enumerate}
+    \item[\boldmath{$SPCCA.\Enc(M,\PK)$}]:
+      \begin{enumerate}
+      \item Generate the one-time signature keys $(\SSK, \SVK) \gets OT1.\KeyGen(\PPP)$ with $\SSK = (\{\chi_i, \gamma_i\}_{i=1}^5, \zeta, \rho) \in \mathbb{Z}_p^{12}$ and $\SVK =  (\{\hat{g}_i\}_{i =1}^5,  \hat{A} ) \in \hat{\G}^6$.
+      \item Choose $\theta \sample \mathbb{Z}_p$ and compute
+        \begin{align*}
+          C_0 &= M\cdot X^{\theta}, & C_1 &= g_1^{\theta}, & C_2 &= g_2^{\theta}.
+        \end{align*}
+      \item Generate a commitment to $\SVK = (\{\hat{g}_i\}_{i =1}^5, \hat{a})$ and let 
+      $$(\com, \open) \gets TC.\Com(\PPP_{TC}, \vec{ck}, \SVK) \in \hat{\G} \times (\G^9 \times \hat{\G}^2)$$
+			be the resulting commitment/decommitment pair.
+      \item Define vector $\vec{u}_{\com} = \vec{u}_2\cdot (1, \com)$ and the Groth-Sahai CRS $\mathbf{u}_{\com}=(\vec{u}_{\com},\vec{u}_1)$. 
+      \item Pick $r \sample \mathbb{Z}_p$. Compute $\vec{C}_{\theta} = \vec{u}_{\com}^{\theta} \cdot (\vec{u}_1)^r$.
+      \item Using the randomness of the commitment $\vec{C}_{\theta}$, generate  proof elements $\vec{\pi}=(\pi_1,\pi_2)=(g_1^r,g_2^r) \in \G^2$ showing that the committed $\theta \in \Z_p$ satisfies the multi-exponentiation equations
+        \begin{align*}
+          C_1 &= g_1^{\theta} & C_2 &= g_2^{\theta}
+        \end{align*}
+      \item Output the ciphertext
+        \begin{align*}
+          \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma}) \in \G^{16} \times \hat{\G}^{11}
+        \end{align*}
+        
+        
+        in which $\vec{\sigma} = OT1.\Sig(\SSK, (C_0, C_1, C_2, {\pi}_1,\pi_2)) \in \G^2$.
+
+        Notice that we don't sign the commitments because in the Groth-Sahai proof system and in this very special case, there is only one valid commitment for given proofs.
+        
+      \end{enumerate}
+      
+    \item[\boldmath{$SPCCA.\Dec(\PK, \vec{C}, \SK)$}]:
+      \begin{enumerate}
+      \item Parse $\PK$ with $(\vec{g}_1, \vec{g}_2, X, \PPP_{TC}, \ck)$ and $\SK$ with $(x_1, x_2)$.
+      \item Parse $\vec{C}$ with $ (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})$.
+      \item Verify the signature is valid $OT1.\Verif(\PPP,  (C_0, C_1, C_2, \pi_1,\pi_2), \sigma) = \True$.
+      \item Using the commitment verification algorithm to verify that $TC.\Verif(\ck, \com, \SVK, \open) = \True$
+      \item Verify that $\vec{\pi}=(\pi_1,\pi_2)$ is a valid Groth-Sahai proof \wrt  $(C_1, C_2, \vec{C}_{\theta}, \com)$. Namely, 
+			it should satisfy 
+			\begin{eqnarray} \label{ver-eq} 
+			E(g_1,\vec{C}_{\theta}) &=& E(C_1 , \vec{u}_{\com}) \cdot E(\pi_1,\vec{u}_1) \\ \nonumber
+			E(g_2,\vec{C}_{\theta}) &=& E(C_2 , \vec{u}_{\com}) \cdot E(\pi_2,\vec{u}_1)
+			\end{eqnarray}
+      \item If any of the verification fails then halt and return $\bot$, otherwise, output $M=C_0/(C_1^{x_1}\cdot C_2^{x_2})$.
+      \end{enumerate}
+      
+    \end{description}
+\end{section}
+
+
+\begin{myTh}
+The scheme provides IND-CCA2 security under the SXDH assumption.
+\end{myTh}
+\begin{proof}
+The proof proceeds with a sequence of games that begins with the real game and ends with a game where no advantage is left to the adversary. In each game, we call $W_i$ the event that the experiment outputs $1$. 
+
+\begin{description}
+\item[\textsf{Game} $0$:] This is the real game. The adversary is given the public key $\PK$ which contains 
+vectors 
+ $(\vec{u}_1, \vec{u}_2)$ such that
+\begin{eqnarray} \label{vec-PK} 
+ \vec{u}_1 &=& (\hat{g}, \hat{h}) \in \hat{\G}^2  \\ \nonumber 
+ \vec{u}_2 &=&  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2,
+\end{eqnarray}
+where $\hat{g},\hat{h} \sample \hat{\G}$,  $\rho_u,\rho_u' \sample \Z_p$.
+ In the challenge phase, 
+it chooses two messages $M_0,M_1 \in \G$ and obtains a challenge ciphertexts 
+$$  \vec{C}^\star = (\SVK^\star, \com^\star, \open^\star, C_0^\star, C_1^\star, C_2^\star, \vec{C}_{\theta}^\star, \vec{\pi}^\star, \vec{\sigma}^\star)  $$
+where 
+   \begin{align*}
+          C_0^\star &= M_{\beta} \cdot X^{\theta^\star}, & C_1^\star &= g_1^{\theta^\star}, & C_2^\star &= g_2^{\theta^\star},
+        \end{align*}
+for some random bit $\beta \sample \{0,1\}$, and 
+\begin{eqnarray*}
+ \com^\star  &=& \hat{C}^\star  = \hat{g}^{\zeta_2^\star} \cdot \prod_{i = 1}^{\ell }\hat{X}_i^{\chi_i^\star } \cdot \hat{X}_{\ell+1}^{w_z^\star} \cdot \hat{X}_{\ell+2}^{a^\star}  \\
+ \open^\star &=& \big( D^\star , g_z^\star, g_1^\star, \dots, g_\ell^\star, A^\star  , \hat{Z}^\star, \hat{R}^\star \big)  \\ 
+& =& \big(  g^{\zeta_2^\star },~ g^{w_z^\star}, ~ g^{\chi_1^\star}, ~\ldots , ~ g^{\chi_\ell^\star} , ~ g^{\chi_z^\star} , ~ g^{a^\star}, ~ 		 
+			 \hat{g}^{\zeta_1^\star} ,  ~\hat{g}^{a^\star-\zeta_1^\star w_z^\star }  \cdot  \prod_{i=1}^{6} {\hat{M}_i^\star~ }^{\chi_i^\star} 
+		 \big), \\
+\vec{C}_{\theta}^\star &=& \vec{u}_{\com^\star}^{\theta^\star} \cdot (\vec{u}_1)^{r^\star}\\
+ \vec{\pi}^\star &=& (\pi_1^\star,\pi_2^\star) =(g_1^{r^\star},g_2^{r^\star}) 
+\end{eqnarray*}
+with $(\hat{M}_1^\star,\ldots,\hat{M}_\ell^\star)=(\hat{g}_1^\star,\ldots,\hat{g}_5^\star,\hat{A}^\star) $ and 
+$\vec{u}_{\com^\star} = \vec{u}_2\cdot (1, \com^\star)$.
+\indent The adversary's decryption queries are always faithfully answered by the challenger. When the adversary halts, it outputs   
+$\beta' \in \{0,1\}$ and wins if $\beta' =\beta$. In this case, the experiment outputs $1$. Otherwise, it outputs $0$.  
+The adversary's advantage is thus $|\Pr[W_0]-1/2|$. \smallskip \smallskip 
+
+\item[\textsf{Game} $1$:] In this game, we modify the generation of the public key and define
+\begin{eqnarray} \label{vec-PK-sim} 
+ \vec{u}_1 &=& (\hat{g}, \hat{h}) \in \hat{\G}^2  \\ \nonumber 
+ \vec{u}_2 &=&  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \cdot (1,{\hat{C}^\star ~}^{-1})  \in \hat{\G}^2.
+\end{eqnarray}
+instead of computing $(\vec{u}_1,\vec{u}_2)$ as in (\ref{vec-PK}) (note that we may assume w.l.o.g. that $\SVK^\star$ and $\com^\star=\hat{C}^\star$ are 
+ generated 
+at the outset of the game).  However, this modification does not affect the adversary's view since $\vec{u}_2$ remains uniformly distributed 
+over $\hat{\G}^2$. We have $\Pr[W_1]=\Pr[W_0]$.   \smallskip \smallskip 
+
+\item[\textsf{Game} $2$:] This game is like Game $1$ with the difference that, if the adversary makes a pre-challenge decryption query 
+ $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that $\com=\com^\star$, the expermiment halts and 
+outputs a random bit. Since Game $2$ is identical to Game $1$ until this event $F_2$ occurs, we have 
+$|\Pr[W_2]-\Pr[W_1]| \leq \Pr[F_2]$. Moreover, since $\com^\star$ was chosen uniformly in $\hat{\G}$ and remains independent of $\A$'s view until 
+the challenge phase, we have $ |\Pr[W_2]-\Pr[W_1]| \leq \Pr[F_2] \leq q_D/p$. \smallskip \smallskip 
+
+
+\item[\textsf{Game} $3$:] This game is like Game $2$ but we modify the decryption oracle. Namely, if the adversary makes a post-challenge decryption query 
+for a valid ciphertext
+$$ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})  $$
+such that $\com=\com^\star$ but $\open \neq \open^\star$, the experiment halts and outputs a random bit. If we call $F_3$ the latter event, 
+we have $|\Pr[W_3]-\Pr[W_2]| \leq \Pr[F_3]$. Moreover, event $F_3$ clearly implies an adversary $\B$ against the target collision-resistance of the 
+structure-preserving trapdoor commitment in Section \ref{trap-com}, which contradicts the Double Pairing assumption. Hence, we have  
+$|\Pr[W_3]-\Pr[W_2]| \leq \mathbf{Adv}_\B^{\mathsf{TCR}\textsf{-}\mathsf{CR}}(\lambda) \leq   \mathbf{Adv}_\B^{\mathrm{DP}}(\lambda)$.   \smallskip \smallskip 
+
+
+\item[\textsf{Game} $4$:] We modify again the decryption oracle. After the phase, if the adversary queries the decryption of a ciphertext 
+ $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that $(\com,\open)=(\com^\star,\open^\star)$
+but $(C_0,C_1,C_2,\pi_1,\pi_2) \neq (C_0^\star,C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$, the experiment halts and outputs a random 
+bit. If we call $F_4$ this event, we have the inequality  $|\Pr[W_4]-\Pr[W_3]| \leq \Pr[F_4]$ since Game $4$ is identical to Game $3$ until $F_4$ occurs.
+ Moreover,   $F_4$ would contradict the strong unforgeability of the one-time structure-preserving signature  and thus the DP assumption. This implies  
+$|\Pr[W_4]-\Pr[W_3]| \leq \mathbf{Adv}_\B^{\mathsf{SUF}\textsf{-}\mathsf{OTS}}(\lambda)   \leq   \mathbf{Adv}_\B^{\mathrm{DP}}(\lambda)$.
+ \smallskip \smallskip 
+
+\item[\textsf{Game} $5$:] We introduce yet another modification in the decryption oracle.  We let the decryption oracle reject all ciphertexts $ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})  $ 
+such that
+\begin{eqnarray} \label{event-F5}
+(\com,\open)=(\com^\star,\open^\star)  \quad \wedge \quad (C_0,C_1,C_2,\pi_1,\pi_2) = (C_0^\star,C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star) 
+ \quad \wedge \quad \vec{C}_{\theta} \neq \vec{C}_{\theta}^\star .
+\end{eqnarray}  
+  Let $F_5$ be the event that the decryption oracle rejects a ciphertext that would not have been rejected in Game $4$.   
+We argue that $\Pr[W_5] = \Pr[W_4]$ since Game $5$ is identical to Game $4$ until event $F_5$ occurs and we have $\Pr[F_5]=0$. 
+ Indeed, 
+%since the vectors $\vec{u}_{\com^\star}$ and $\vec{u}_1$ are linearly independent, they span the entire vector space $\hat{\G}^2$ which 
+%means that, 
+for a given $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star) \in \G^4$, there exists only one commitment $\vec{C}_{\theta}^\star \in \hat{\G}^2$ that satisfies the equalities (\ref{ver-eq}). This follows from the fact that, since  
+$(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)=(g_1^{\theta^\star},g_2^{\theta^\star},g_1^{r^\star},g_2^{r^\star})$, relations 
+ (\ref{ver-eq}) can be written
+			\begin{eqnarray*}  
+			E(g_1,\vec{C}_{\theta}^\star) &=& E(g_1^{\theta^\star} , \vec{u}_{\com}) \cdot E(g_1^{r^\star},\vec{u}_1) = E(g_1 , \vec{u}_{\com}^{\theta^\star}) \cdot E(g_1,\vec{u}_1^{r^\star}) \\ \nonumber
+			E(g_2,\vec{C}_{\theta}^\star) &=& E(g_2^{\theta^\star} , \vec{u}_{\com}) \cdot E(g_2^{r^\star},\vec{u}_1) =E(g_2 , \vec{u}_{\com}^{\theta^\star}) \cdot E(g_2,\vec{u}_1^{r^\star})
+			\end{eqnarray*}
+which uniquely determines the  only commitment $\vec{C}_{\theta}^\star=\vec{u}_{\com}^{\theta^\star} \cdot \vec{u}_1^{r^\star} \in \hat{\G}^2$ that satisfies (\ref{ver-eq}). 
+ This shows that $\Pr[F_5] = 0$, as claimed. 
+   \smallskip \smallskip 
+
+
+
+
+
+\item[\textsf{Game} $6$:] In this game, we modify the distribution of the public key.  Namely, instead of generating 
+the vectors $(\vec{u}_1,\vec{u}_2)$ as in (\ref{vec-PK-sim}), we 
+ set 
+\begin{eqnarray} \label{vec-PK-sim-bis} 
+ \vec{u}_1 &=& (\hat{g}, \hat{h}) \in \hat{\G}^2  \\ \nonumber 
+ \vec{u}_2 &=&  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u}) \cdot (1,{\hat{C}^\star~}^{-1})  \in \hat{\G}^2.
+\end{eqnarray}
+Said otherwise,  $\vec{u}_2$ is now the product of two terms, the first one of which lives in the 
+one-dimensional subspace spanned by $\vec{u}_1$. Under the DDH assumption in $\hat{\G}$, this modified  
+distribution of $\PK$ should have not noticeable impact on the adversary's behavior.  
+ A straightforward reduction shows 
+that $|\Pr[W_6]-\Pr[W_5] | \leq \mathbf{Adv}^{\mathrm{DDH}}_\B (\lambda)$. Note that, although the vectors $(\vec{u}_{\com^\star},\vec{u}_1) \in \hat{\G}^2$ are 
+no longer linearly independent, $\vec{C}_{\theta}^\star = \vec{u}_1^{\rho_u \cdot \theta^\star +r^\star}$ remains the only commitment 
+that satisfies the verification equations  for a given tuple $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$.
+ 
+
+ \smallskip \smallskip 
+
+\item[\textsf{Game} $7$:] In this game, we  modify the challenge ciphertext and replace the NIZK proof $\vec{\pi}^\star=(\pi_1^\star,\pi_2^\star) \in \G^2$ by a simulated proof which is produced 
+using $\rho_u \in \Z_p$ as a simulation trapdoor. Namely, $(\vec{C}_\theta^\star,\vec{\pi}^\star)$ is obtained by picking $r \sample \Z_p$ and  computing
+\begin{eqnarray*}
+\vec{C}_{\theta}^\star &=& \vec{u}_1^{r},   \qquad \qquad \quad
+\pi_1^\star  =  g_1^{r} \cdot {C_1^\star }^{-\rho_u} , \qquad \qquad \quad 
+\pi_2^\star  =  g_2^{r} \cdot {C_2^\star }^{-\rho_u}
+\end{eqnarray*}
+Observe that, although $(\vec{C}_\theta^\star,\pi_1^\star,\pi_2^\star)$ are generated without using the witness $\theta^\star = \log_{g_1}(C_1^\star) =
+ \log_{g_2}(C_2^\star)$,  the NIZK property of 
+GS proofs ensures that 
+ their distribution remains exactly as in Game $6$: indeed, if we define $\tilde{r} =r -\rho_u \cdot \theta^\star$, we have
+\begin{eqnarray*}
+\vec{C}_{\theta}^\star &=& \vec{u}_{\com^\star}^{\theta^\star} \cdot \vec{u}_1^{\tilde{r}},   \qquad \qquad \quad
+\pi_1^\star  =  g_1^{\tilde{r}} , \qquad \qquad \quad 
+\pi_2^\star  =  g_2^{\tilde{r}} ,
+\end{eqnarray*}
+ which implies $\Pr[W_7]=\Pr[W_6]$.  
+ \smallskip \smallskip
+
+
+\item[\textsf{Game} $8$:]  We modify the generation of the challenge ciphertext, which is generated using the private key $\SK=(x_1,x_2)$ instead
+of the public key: Namely, the challenger computes 
+   \begin{align*}
+     C_1^\star &= g_1^{\theta^\star}, & C_2^\star &= g_2^{\theta^\star},    &  C_0^\star &= M_{\beta} \cdot {C_1^\star}^{x_1} \cdot  {C_2^\star}^{x_2} , 
+        \end{align*} 
+while $(\vec{C}_\theta^\star,\pi_1^\star,\pi_2^\star)$ are computed using the NIZK simulation trapdoor $\rho_u \in \Z_p$ as in Game $7$. 
+This modification does not affect the adversary's view since the ciphertext retains exactly the same distribution as in Game $7$. 
+We have $\Pr[W_8]=\Pr[W_7]$.  \smallskip \smallskip
+
+\item[\textsf{Game} $9$:] We modify again the distribution of the challenge ciphertext which is obtained as 
+   \begin{align*}
+     C_1^\star &= g_1^{\theta_1^\star}, & C_2^\star &= g_2^{\theta_2^\star},    &  C_0^\star &= M_{\beta} \cdot {C_1^\star}^{x_1} \cdot  {C_2^\star}^{x_2} , 
+        \end{align*} 
+				for random and independent $\theta_1^\star,\theta_2^\star \sample \Z_p$, 
+while the NIZK proof $(\vec{C}_\theta^\star,\pi_1^\star,\pi_2^\star)$ is simulated using $\rho_u \in \Z_p$ as in Game $8$.  Since 
+the witness $\theta^\star \in \Z_p$ was not used anymore in Game $8$, a straightforward reduction shows that  any noticeable change in $\A$'s output distribution implies a DDH distinguisher in $\G$. We have 
+$|\Pr[W_9]-\Pr[W_8]| \leq   \mathbf{Adv}_{\B,\G}^{\mathrm{DDH}}(\lambda)$. \medskip 
+
+ We remark that, although we now have  
+$\log_{g_1}(C_1^\star) \neq \log_{g_2}(C_2^\star)$ with overwhelming probability, the signed ciphertext components $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$ 
+ still uniquely determine $\vec{C}_{\theta}^\star \in \hat{\G}^2$ as the only commitment that satisfies the verification equations of 
+$(\vec{C}_{\theta}^\star,\pi_1^\star,\pi_2^\star)$:
+indeed, the equalities 
+\begin{eqnarray*}
+E(g_1,\vec{C}_\theta^\star) &=& E(C_1^\star, \vec{u}_{\com^\star}) \cdot E(\pi_1^\star ,\vec{u}_1)  \\ 
+E(g_2,\vec{C}_\theta^\star) &=& E(C_2^\star, \vec{u}_{\com^\star}) \cdot E(\pi_2^\star ,\vec{u}_1) 
+\end{eqnarray*} 
+can be written 
+\begin{eqnarray*}
+E(g_1,\vec{C}_\theta^\star) &=& E(C_1^\star , \vec{u}_1^{\rho_u} ) 
+\cdot E(  g_1^{r} \cdot {C_1^\star }^{-\rho_u} , \vec{u}_1)  = E(g_1^r,\vec{u}_1)  \\
+E(g_2,\vec{C}_\theta^\star) &=& E(C_2^\star , \vec{u}_1^{\rho_u} ) 
+\cdot E(  g_2^{r} \cdot {C_2^\star }^{-\rho_u} , \vec{u}_1) =E(g_2^r,\vec{u}_1),
+\end{eqnarray*}
+which implies that $\vec{C}_{\theta}^\star = \vec{u}_1^r$ is the only commitment satisfying (\ref{ver-eq}). Hence, at any step of the sequence of 
+games, $\vec{C}_\theta^\star$ 
+is always uniquely determined by $(C_1^\star,C_2^\star,\pi_1^\star,\pi_2^\star)$ and does not have to be signed. 
+ \smallskip \smallskip
+
+ 
+
+\end{description}
+
+In the final game, it is easy to see that $\Pr[W_9]=1/2$ since the challenge ciphertext does not carry any information about $\beta \in \{0,1\}$. 
+Indeed, we have 
+   \begin{align*}
+     C_1^\star &= g_1^{\theta_1^\star}, & C_2^\star &= g_2^{\theta_1^\star + \theta_1'},    &  C_0^\star &= M_{\beta} \cdot X^{\theta_1^\star} 
+		\cdot  {g_2}^{\theta_1' \cdot x_2} , 
+        \end{align*} 
+for some random $\theta_1' \in_R \Z_p$, which implies that 		the term ${g_2}^{\theta_1' \cdot x_2}$ perfectly hides $M_\beta$ in the expression of $C_0^\star$. This follows from the fact
+that $x_2 \in \Z_p$ is perfectly independent of the adversary's view.	Indeed, the public key leaves $x_2 \in \Z_p$ completely undetermined as it only reveals $X=g_1^{x_1} g_2^{x_2}$. During the game, decryption queries are guaranteed not to reveal anything about $x_2$ since all 
+NIZK proofs $(\vec{C}_{\theta},\pi_1,\pi_2)$ take place on   Groth-Sahai CRSes $(\vec{u}_{\com},\vec{u}_1)$ which are perfectly sound (as 
+they span the entire vector space $\hat{\G}^2$)
+whenever $\com \neq \com^\star$. This implies that, although the adversary can see a simulated NIZK proof $(\vec{C}_\theta^\star,\pi_1^\star,\pi_2^\star)$ for 
+a false statement in the challenge phase, it remains  unable to trick the decryption oracle into accepting a  ciphertext 
+$ \vec{C} = (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})  $ such that $\log_{g_1}(C_1) \neq \log_{g_2}(C_2)$. 
+As a consequence, the adversary does not learn anything about $x_2$ from responses of the decryption oracle. 
+  
+\end{proof}
+
+
+
+
+
+
+

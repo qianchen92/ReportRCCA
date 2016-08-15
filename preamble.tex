@@ -1,0 +1,106 @@
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{main}
+\usepackage{fullpage}
+%\usepackage[top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[onelanguage,boxed]{algorithm2e}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{subfigure}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\hypersetup{colorlinks,linkcolor=black,urlcolor=blue}
+\usepackage[font=small,labelfont=bf]{caption}
+\newtheorem {myDef} {Definition}
+\newtheorem {myTh}{Theorem}
+\lstset
+{
+  language=[Objective]Caml,
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=leftline,           % adds a frame around the code
+  tabsize=2,          % sets default tabsize to 2 spaces
+  captionpos=b,           % sets the caption-position to bottom
+  breaklines=true,        % sets automatic line breaking
+  breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+  escapeinside={\%*}{*)},          % if you want to add a comment within your code
+  basicstyle=\ttfamily,
+  keywordstyle=\color{BurntOrange}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  commentstyle=\color{LimeGreen}\ttfamily,
+  morecomment=[l][\color{RoyalBlue}]{\#}
+}
+\lstset
+{
+  emph={Stack},
+  emphstyle={\color{DarkOrchid}}
+}
+
+
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\PR}{\operatorname{Pr}}
+\newcommand{\PP}{\mathsf{P}}  
+\newcommand{\VV}{\mathsf{V}}  
+\newcommand{\K}{\mathsf{K}}  
+\newcommand{\SIM}{\mathsf{S}}  
+\newcommand{\lbl}{\mathsf{lbl}} 
+\newcommand{\PPE}{\mathrm{PPE}} 
+\newcommand{\SK}{\mathsf{SK}}
+\newcommand{\PK}{\mathsf{PK}}
+\newcommand{\VK}{\mathsf{VK}}
+\newcommand{\SSK}{\mathsf{SSK}}
+\newcommand{\SVK}{\mathsf{SVK}}
+\newcommand{\sk}{\mathsf{sk}}
+\newcommand{\ck}{\mathsf{ck}}
+\newcommand{\tk}{\mathsf{tk}}
+\newcommand{\msk}{\mathsf{msk}}
+\newcommand{\vk}{\mathsf{vk}}
+\newcommand{\ovk}{\mathsf{ovk}}
+\newcommand{\pk}{\mathsf{pk}}
+\newcommand{\opk}{\mathsf{opk}}
+\newcommand{\osk}{\mathsf{osk}}
+\newcommand{\com}{\mathsf{com}}
+\newcommand{\open}{\mathsf{open}}
+\newcommand{\True}{\mathsf{True}}
+\newcommand{\False}{\mathsf{False}}
+\newcommand{\BF}{\mathbf}
+\newcommand{\sample}{\stackrel{{\scriptscriptstyle \mkern4mu R}}{\gets}}
+\newcommand{\etal}{\textit{el. al.}}
+\newcommand{\eg}{\textrm{e.g.} }
+\newcommand{\ie}{\textrm{i.e.} }
+\newcommand{\wrt}{\textrm{w.r.t.} }
+\providecommand{\tprod}{{\textstyle\prod}}
+\newcommand{\Setup}{{\mathsf{Setup}}}
+\newcommand{\KeyGen}{{\mathsf{KeyGen}}}
+\newcommand{\Enc}{{\mathsf{Enc}}}
+\newcommand{\Dec}{{\mathsf{Dec}}}
+\newcommand{\Sig}{{\mathsf{Sign}}}
+\newcommand{\Verif}{{\mathsf{Verify}}}
+\newcommand{\Prove}{{\mathsf{Prove}}}
+\newcommand{\Com}{{\mathsf{Commit}}}
+\newcommand{\PPP}{\mathsf{PP}}
+\newcommand{\Forge}{\mathsf{Forge}}
+\newcommand{\Adv}{\mathcal{A}}
