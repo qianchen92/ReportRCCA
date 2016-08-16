@@ -1,7 +1,7 @@
 For the simplicity, we choose the symmetric setting of the bilinear group and our construction is based on the DLIN assumption.
 
 \begin{description}
-\item[\boldmath$Setup(\lambda)$:] This algorithm generates the public and secret keys of our RCCA encryption scheme.
+\item[\boldmath$RCCA1.\Setup(\lambda)$:] This algorithm generates the public and secret keys of our RCCA encryption scheme.
   \begin{enumerate}
   \item Pick bilinear group $(\G, \G_T)$ of prime order $p$ and the bilinear map $e$ on this pair of groups with generators $(f,g,h) \sample \G^3$ which verify $f^x = g^y = h$.
   \item Choose a random group generator $d \in \G$.
@@ -12,10 +12,11 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
     $$\vk_{sig} = (g_z, h_z, g_r, h_u, \{g_i, h_i\}_{i = 1}^3, \alpha ,\beta)$$
     and
     $$\sk_{sig} = (\vk_{sig}, \zeta, \rho, \phi, \{\chi_i, \gamma_i, \delta_i\}_{i = 1}^3).$$
-  \item $\PK = (d,\pk_{enc}, \vk_{sig}, \sigma_{crs})$
+  \item $\PK = (d,\pk_{enc}, \vk_{sig}, \sigma_{crs})$.
+  \item $\SK = (x, y)$
   \end{enumerate}
 
-\item[\boldmath$Enc(\PK,m)$:] This algorithm takes as input a message and the public key of the underlying encryption scheme, outputs the corresponded ciphertext of our RCCA encryption scheme.
+\item[\boldmath$RCCA1.\Enc(\PK,m)$:] This algorithm takes as input a message and the public key of the underlying encryption scheme, outputs the corresponded ciphertext of our RCCA encryption scheme.
   \begin{enumerate}
   \item Choose two random exponents $(\theta_1, \theta_2) \sample \Z_p$ and compute $ \vec{r} = (\theta_1, \theta_2)$.
   \item Compute the ciphertext $\vec{C} = (C_1, C_2, C_3)$:
@@ -95,24 +96,18 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
     
   \end{enumerate}
 
-\item[\boldmath{$ReRandom(PK, C)$}:]\input{rerandomization}
+\item[\boldmath{$RCCA1.\Dec(\PK,\SK, \vec{C})$}]:
+  \begin{enumerate}
+  \item Parse $\vec{C}$ as $(C_1, C_2, C_3), \vec{C}_{H}, \vec{C}_{d^b}, \vec{C}_{M}, \{\vec{C}_{R_1}\}_{i= 1}^2, \{\vec{C}_{D_i}\}_{i = 1}^3, \{\vec{C}_{S_i}\}_{i = 1}^2, \{\vec{C}_{\Sigma_i}\}_{i = 1}^3,\{\vec{C}_{\Delta_i}\}_{i=1}^3, \vec{C}_F, \vec{C}_G, \vec{\pi})$.
+  \item Parse $\SK$ as $(x,y)$
+  \item Verify that all proofs are correct.
+  \item If any proof fails then return $\bot$. otherwise return $C_3/(C_1 \cdot C_2)$ 
+  \end{enumerate}
+  
+\item[\boldmath{$RCCA1.\Rerand(\PK, C)$}]:
+  \input{rerandomization}
 
 \end{description}
 
 
-\section{Efficiency}
-From the efficiency point of view, there are in total 108 group elements.
-
-For the efficientcy reason, we can replace
-\begin{itemize}
-\item $(\vec{\pi}_3,\vec{\pi}_9)$ by $(\vec{\pi}_3 \cdot \vec{\pi}_9)$
-\item $(\vec{\pi}_4,\vec{\pi}_{10})$ by $(\vec{\pi}_4 \cdot\vec{\pi}_{10})$
-\item $(\vec{\pi}_5,\vec{\pi}_{11})$ by $(\vec{\pi}_5 \cdot\vec{\pi}_{11})$
-\item $(\vec{\pi}_6,\vec{\pi}_{12})$ by $(\vec{\pi}_6 \cdot\vec{\pi}_{12})$
-\item $(\vec{\pi}_7,\vec{\pi}_{13})$ by $(\vec{\pi}_7 \cdot\vec{\pi}_{13})$
-\end{itemize}
-
-Thus we can reduce the number of group elements down to $108-5 \cdot 3 = 93$.
-
-\input{newrerand}
 %\input{proofs}

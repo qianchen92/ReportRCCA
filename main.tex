@@ -12,7 +12,6 @@
 
 \maketitle
 
-\pagestyle{empty} %
 \thispagestyle{empty}
 
 %% Attention: pas plus d'un recto-verso!
@@ -27,20 +26,35 @@
 \section{Preliminaries}
 \input{prelim}
 
-\section{From tag-based encryption to the weak RCCA encryption scheme}
-\input{tbe}
-
 
 \section{Efficient instantiation of the re-randomization encryption of generic construction~\cite{DBLP:conf/eurocrypt/ChaseKLM12}}
 \input{random}
 
-\section{Construction of Structure Perserving Public Encryption scheme}
+\section{Using the trapdoor commitment scheme to construct efficient structure preserving publicly verifiable CCA-2 encryption scheme}
 \input{SPPE}
 
-\section{Combine Structure Perserving Public Encryption scheme with LHSPS}
-\input{RCCA3}
+\section{Combine Structure Perserving Public Encryption scheme with LHSPS and Groth-Sahai proof}
+\input{RCCA2}
+
+\begin{section}{Conclusion}
+  \input{conclusion}
+\end{section}
 
 \printbibliography
+
+\begin{appendices}
+  
+\begin{section}{Details of the rerandomization algorithm of RCCA encryption by Chase \etal\cite{DBLP:conf/eurocrypt/ChaseKLM12}}
+  \label{Rerandomization}
+  \input{appendRerand.tex}
+\end{section}
+
+
+\end{appendices}
+
+
 \end{document}
+
+
 
 

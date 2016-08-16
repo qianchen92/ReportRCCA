@@ -1,21 +1,58 @@
-In this section, we first briefly present some standard computation assumptions, we will use in this report.  
+In this section, we briefly present some standard computation assumptions, we will use in this report.  
 Then we present the security model and proprieties we want achieve we also give some building blocks.
 
 \begin{subsection}{Assumptions}
 
-  In cryptography, one of the most studied assumption is Diffie-Hellman assumption.
-%  \begin{myDef}{Decisional Diffie-Hellman(DDH)}
-%    We say a group $\G$ of prime order $p$ verifies the Diffie-Hellman assumption, if given a group generator $g$ and two triples of group elements $(g^a, g^b, g^{ab})$ and $(g^a, g^b, g^c)$, in which $(a, b, c)$ are random values generated randomly $(a, b, c) \gets \mathbb{Z}_p^3$, we define the adva$	//TODO
-%  \end{myDef}
+  In the rest of this work, a negligible function $\varepsilon(\lambda)$ is a positive function which is asymptoticaly smaller than $2^{-\lambda}$.
+  
+  In cryptography, one of the most studied assumption is Diffie-Hellman assumption. In this work, we consider a slightly stronger variant of DDH assumption Symmetric external Diffie-Hellman(SXDH).
+
+  \begin{myDef}{Decisional Diffie-Hellman(DDH)}
+    For a security parameter $\lambda$, we say a group $\G$ of prime order $p>2^{\lambda}$ verifies the Diffie-Hellman assumption, if given a group generator $g \in \G$ and two triples of group elements $(g^a, g^b, g^{ab})$ and $(g^a, g^b, g^c)$ in which $(a, b, c)$ are random values generated randomly $(a, b, c) \gets \mathbb{Z}_p^3$, we define the advantage of an adversary $\Adv$ against the DDH problem by:
+
+    \begin{align*}
+      adv(\Adv) = |\PR(\Adv(g, g^a, g^b, g^{ab}) = 1) = \PR(\Adv(g, g^a, g^b, g^c) = 1)| < \varepsilon(\lambda).
+    \end{align*}
+
+    where $\varepsilon(\lambda)$ is a negligible function of the security parameter $\lambda$.
+  \end{myDef}
+
+  \begin{myDef}{Symmetric external Diffie-Hellman(SXDH)}
+    For a security parameter $\lambda$ and for a asymmetric pairing group setting, three groups of prime order $p>2^\lambda$: $(\G, \hat{\G}, \G_T)$ and the pairing $e: \G \times \hat{\G} \to \G_T$. If there is no adversary with non-negligible advantage against the DDH problem both on the group $\G$ and $\hat{\G}$, then we say that the group triple $(\G, \hat{\G}, \G_T)$ verifies the SXDH assumption.
+  \end{myDef}
+
+  We also introduce Double Pairing assumption which can be applied by the SXDH assumption
+  
+  \begin{myDef}{Double Pairing(DP)}
+    Given a asymmetric pairing setting $(\G, \hat{G}, \G_T, e:\G \times \hat{\G} \to \G_T)$. Given two random non-zero generators $(g_z, g_r) \in \G$,
+    \begin{align*}
+      \PR[(z, r) \gets \Adv| (z, r)\in \hat{\G}^2 \wedge e(g_z, z) \cdot e(g_r, r) = 1] \in negl(\lambda)
+    \end{align*}
+  \end{myDef}
+
+  
+  For the simplicity of the description of the algorithm, we also use symmetric pairing setting, in which the DDH and SXDH assumption are not verified, we introduce the DLIN assumption
+  \begin{myDef}{Decisional Linear(DLIN)}
+    For a security parameter $\lambda$, we say a group $\G$ of prime order $p>2^{\lambda}$ verifies the Decisional Linear assumption, if given three group generators $(f, g, h) \in \G^3$ and two triples of group elements $(f^a, g^b, h^{a+b})$ and $(f^a, g^b, h^c)$ in which $(a, b, c)$ are random values generated randomly $(a, b, c) \gets \mathbb{Z}_p^3$, we define the advantage of an adversary $\Adv$ against the DLIN problem by:
+
+    \begin{align*}
+      adv(\Adv) = |\PR(\Adv(f, g, h, f^a, g^b, h^{a+b}) = 1) = \PR(\Adv(f, g, h, f^a, g^b, h^c) = 1)| < \varepsilon(\lambda).
+    \end{align*}
+
+    where $\varepsilon(\lambda)$ is a negligible function of the security parameter $\lambda$.
+  \end{myDef}
+
+
+  
 
 \end{subsection}
 
 
 
 
-\begin{subsection}{Bulding Blocks}
+\begin{subsection}{Building Blocks}
 
-  \begin{myDef}{Linearly Homomorphic Structure Preserving Signature based on SXDH assumption}
+  \begin{myDef}{Linearly Homomorphic Structure Preserving Signature based on SXDH assumption~\cite{DBLP:conf/crypto/LibertPJY13}}
     \begin{description}
     \item[\boldmath{$LHSPS.\Setup(1^{\lambda})$}]:
       \begin{enumerate}
@@ -27,27 +64,179 @@ Then we present the security model and proprieties we want achieve we also give 
     \item[\boldmath{$LHSPS.\KeyGen(\PPP)$}]:
       \begin{enumerate}
       \item Generate $(\{\hat{\chi}_i, \hat{\gamma}_i\}_{i =1 }^k, \hat{\zeta}, \hat{\rho}) \sample \mathbb{Z}_p^{2k+2}$.
-      \item Compute for $i \in \{1, \dots, k\}$, $\hat{g}_i \gets \hat{g}_z^{\hat{\chi}_i}\hat{g}_r^{\hat{\gamma}_i}$ and $\hat{a} \gets \hat{g}_z^{\hat{\zeta}}\hat{g}_r^{\hat{\rho}}$.
-      \item Output $\vk = (\{\hat{g}_i\}_{i=1}^k, \hat{a}) \in \hat{\G}^{k+1}$ and $\sk = (\{\hat{\chi}_i, \hat{\gamma}_i\}_{i=1}^k, \hat{\zeta}, \hat{\rho}) \in \mathbb{Z}_p^{2k+2}$.
+      \item Compute for $i \in \{1, \dots, k\}$, $\hat{g}_i \gets \hat{g}_z^{\hat{\chi}_i}\hat{g}_r^{\hat{\gamma}_i}$.
+      \item Output $\vk = (\{\hat{g}_i\}_{i=1}^k) \in \hat{\G}^{k}$ and $\sk = (\{\hat{\chi}_i, \hat{\gamma}_i\}_{i=1}^k) \in \mathbb{Z}_p^{2k}$.
       \end{enumerate}
     \item[\boldmath{$LHSPS.\Sig(\sk, \{m_1, \dots, m_k\})$}]: where $(m_1, \dots, m_k) \in \G^k$
       \begin{enumerate}
-      \item Parse $\sk$ with $(\{\hat{\chi}_i, \hat{\gamma}_i\}_{i = 1}^k, \hat{\zeta}, \hat{\rho})$.
+      \item Parse $\sk$ with $(\{\hat{\chi}_i, \hat{\gamma}_i\}_{i = 1}^k)$.
       \item Compute
         \begin{align*}
-          z &= g^{\hat{\zeta}} \cdot \prod_{i=1}^km_i^{-\hat{\chi}_i} & r &= g^{\hat{\rho}} \cdot \prod_{i =1}^km_i^{-\hat{\gamma}_i} 
+          z &= \prod_{i=1}^km_i^{\hat{\chi}_i} & r &= \prod_{i =1}^km_i^{\hat{\gamma}_i} 
         \end{align*}
       \item Output the signature $\sigma = (z, r)$
       \end{enumerate}
 
     \item[\boldmath{$LHSPS.\Verif(\vk, \sigma, \{m_1, \dots, m_k\})$}]:
       \begin{enumerate}
-      \item Parse the signature $\sigma$ with $\sigma = (z, r)$ and the verification key $\vk$ with $\vk = (\hat{g}_1, \dots, \hat{g}_k, \hat{a})$
+      \item Parse the signature $\sigma$ with $\sigma = (z, r)$ and the verification key $\vk$ with $\vk = (\hat{g}_1, \dots, \hat{g}_k)$
       \item Verify the pairing equation:
         \begin{align*}
-          e(g, \hat{a}) &= e(z, \hat{g}_z) \cdot e(r, \hat{g}_r) \cdot \prod_{i = 1}^ke(m_i, \hat{g}_i)
+          e(z, \hat{g}_z) \cdot e(r, \hat{g}_r) &=  \cdot \prod_{i = 1}^ke(m_i, \hat{g}_i)
         \end{align*}
       \end{enumerate}
     \end{description}
   \end{myDef}
+
+
+  \begin{myDef} A LHSPS for the message vectors of size $k$ is strongly unforgeable if no PPT(probabilistic polynomial Turing machine) adversary has non-negligible advantage in the following game:
+    \begin{description}
+    \item[Init phase: ]The challenger use $\Setup$ and $\KeyGen$ to generate the public parameters $\PPP$, verification key $\VK$ and signing key$\SK$. Then send $\PPP$ and $\VK$ to the challenger.
+    \item[Signing queries: ] The adversary has access of a signing oracle, he can require a polynomial number of messages $\{\vec{M}_i\}_{i = 1}^q$ to sign. 
+    \item[Challenge phase: ] The adversary outputs a message and signature pair $(\vec{M}^*, \sigma^*)$.
+    \end{description}
+
+    \begin{align*}
+      adv(\Adv) &= \PR[LHSPS.\Verif(\VK, \vec{M}^* , \sigma) = \True \wedge \vec{M}^* \not \in Span(\{\vec{M}_i\}_{i=1}^q)]
+    \end{align*}
+
+  \end{myDef}
+
+  The following theorem is proved in~\cite{DBLP:journals/dcc/LibertPJY15}.
+  
+  \begin{myTh}
+    The previous constructed LHSPS is strongly unforgeable.
+  \end{myTh}
+  
+  %  The security of the One-Time Linearly Homomorphic Structure Preserving Signature is defined by the following games
+
+  In the construction of the structure preserving publicly verifiable encryption scheme, we also need a trapdoor commitment proposed by Abe \etal~\cite{DBLP:conf/eurocrypt/AbeKOT15}.
+
+  \begin{description}
+  \item[\boldmath{$TC.\Setup(1^{\lambda},\ell)$}]: Generate the public parameters for the trapdoor commitment scheme for security parameter $\lambda$ and message vector length $\ell$. 
+    \begin{enumerate}
+    \item Choose a random prime $p< 2^{\lambda}$.
+    \item Generate a asymmetric pairing groups $(\G, \hat{\G}, \G_T)$ of prime order $p$ and a pairing function $e : \G \times \hat{\G} \to \G_T$.
+    \item Generate the group generators $(g, \hat{g}) \in \G \times \hat{\G}$.	
+    \item $\PPP = (p, \G, \hat{\G}, \G_T, e, g, \hat{g},\ell)$.
+    \end{enumerate}
+
+  \item[\boldmath{$TC.\KeyGen(\PPP)$}]:
+    \begin{enumerate}
+    \item For $i = 1, \dots, \ell+2$, generate random values $\rho_i \sample \mathbb{Z}_p^*$, then compute $\hat{X}_i \gets \hat{g}^{\rho_i}$.
+    \item Set $\ck \gets \{\hat{X}_i\}_{i = 1}^{\ell+2}$ and $tk \gets \{\rho_i\}_i^{\ell+2}$.
+    \end{enumerate}
+
+
+  \item[\boldmath{$TC.\Com(\PPP, \ck, \vec{M})$}]: where $\vec{\hat{M}} = (\hat{M}_1, \dots, \hat{M}_\ell) \in \hat{\G}^\ell$.
+    \begin{enumerate}
+    \item Choose a random value $w_z \in \mathbb{Z}_p^*$ then compute $g_z = g^{w_z}$.
+    \item For $i = 1, \dots, \ell$, generate random values $\chi_i \sample \mathbb{Z}_p$ and compute $g_i = g^{\chi_i}$.
+    \item Set $\vk_{pots} \gets (g_z, g_1, \dots, g_\ell) \in \G^{\ell+1}$ and $\sk_{pots} \gets (w_z,\chi_1, \dots, \chi_\ell)$.
+    \item Choose randomly $a \sample \mathbb{Z}_p$, then set $\ovk_{pots} =A = g^{a}$ and $\osk_{pots} = a$.
+    \item Using the signing key $\sk_{pots}$ to generate signatures of the message $\vec{\hat{M}}$ \wrt to the one-time signature's secret key $\osk_{pots}$:
+      \begin{enumerate}
+      \item Generate random value $\zeta_1 \in \mathbb{Z}_p$
+      \item Compute the signature $(\hat{Z}, \hat{R}) \in \hat{\G}^2$ for $\vec{\hat{M}}$:
+	\begin{align*}
+	  \hat{Z} &= \hat{g}^{\zeta_1} & \hat{R} = \hat{g}^{a-\zeta_1 w_z}\prod_{i=1}^{\ell} \hat{M}_i^{\chi_i} 
+	\end{align*}
+      \end{enumerate}
+    \item We use the commitment key to generate the commitment for the message.
+      \begin{enumerate}
+      \item Set $(m_1, \dots, m_{\ell+2}) \gets (\chi_1, \dots, \chi_\ell, w_z, a)$ 
+      \item Parse $\vec{\ck}$ as $(\hat{X}_1, \dots, \hat{X}_{\ell+2})$.
+      \item Generate a random value $\zeta_2 \gets \mathbb{Z}_p^*$ and compute:
+	\begin{align*}
+	  \hat{C} &= \hat{g}^{\zeta_2}\prod_{i = 1}^{\ell+2}\hat{X}_i^{m_i} & D &= g^{\zeta_2}
+	\end{align*}
+      \end{enumerate}
+    \item We set the commitment as $\com  = \hat{C}$ and $\open = (D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R}) \in \G^{\ell+3} \times \hat{\G}^{2}$.
+    \end{enumerate}
+    
+  \item[\boldmath{$TC.\Verif(\ck, \com, \vec{\hat{M}}, \open)$}] :
+    \begin{enumerate}
+    \item Parse $\vec{\hat{M}}$ with $(\hat{M}_1, \dots, \hat{M}_\ell)$ and $\open$ with $(D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R})$.
+    \item Set $\vec{N} = (N_1, \dots, N_{\ell+2}) = (g_1, \dots, g_\ell, g_z, \ovk_{pots})$
+    \item Using $\ovk_{pots} = A \in \G$, verify the following equations:
+      \begin{align*}
+	e(g, \hat{C}) &= e(D, \hat{g}) \prod_{i = 1}^{\ell+2} e(N_i, \hat{X}_i) & e(A, \hat{g}) &= e(g_z, \hat{Z}) \cdot e(g, \hat{R}) \cdot \prod_{i = 1}^\ell e(g_i, \hat{M}_i) 
+      \end{align*}
+    \end{enumerate}
+  \end{description}
+
+  \begin{myDef}{Chosen-Message Target Collision Resistance} This property of a Trapdoor Commitment scheme $TC$ is defined by the winning probability of the adversary against the following security game:
+    \begin{description}
+    \item[Init phase:] The challenger generate the public parmeters $\PPP_{TC} \gets TC.\Setup$.
+    \item[Query phase:] The adversary has oracle access of the commitment algorithm $\Com$. For each query of message $m$, the challenger compute $(\com, \open) \gets TC.\Com(m)$. Record them in the hash table $Q$. and outputs $(\com, \open)$ to the adversary.
+    \item[Challenge phase:] The adversary outputs message-commitment triple $(m^*, \com^*, \open^*)$.
+    \end{description}
+    The advantage of the adversary is defined by the following probability:
+    \begin{align*}
+      \PR[(m^*, \com^*, \open^*) \gets \Adv | \com^* \in Q \wedge (\com^*, m^*) \not \in Q \wedge TC.\Verif(\vec{ck}, \com^*, m^*, \open^*) = \True].
+    \end{align*}
+  \end{myDef}
+
+  The following theorem is proved in~\cite{DBLP:conf/eurocrypt/AbeKOT15}.
+
+  \begin{myTh}
+    The previous Trapdoor Commitment scheme is Chosen-Massage Target Collision Resistant.
+  \end{myTh}
+
+  
+
+\end{subsection}
+
+
+\begin{subsection}{Security Notions}
+
+  
+  An public key encryption scheme is a quadruple of algorithms $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec)$.
+
+  \begin{myDef}{CCA-2}
+  The CCA-2 security of the public key encryption is defined by the wining probability of the adversary in the following game:
+  \begin{description}
+  \item[Init phase]:
+    We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
+  \item[Quary phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
+  \item[Challenge phase]: The adversary choose two message $(m_0, m_1)$, then submits them to the challenger. The challenger choose randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and return the result ciphertext $c_b$ to the adversary.
+  \item[Quary phase 2]: The adversary has the oracle access to the decryption oracle expect that he can not require the oracle to decrypt the ciphertext $c_b$.
+  \item[Gussing phase]: The adversary output a bit $b'$.
+  \end{description}
+
+  The encryption scheme $\mathcal{E}$ is CCA-2 secure iff $adv(\Adv) = |\PR(b = b') - \frac{1}{2}| < negl(\lambda)$ where $negl(\lambda)$ is a negligible function \wrt $\lambda$.
+  \end{myDef}
+
+  We also define the Replayable-CCA encryption scheme(RCCA)
+  \begin{myDef}{RCCA}
+    The RCCA security of the public key encryption is defined by the wining probability of the adversary in the following game:
+    \begin{description}
+    \item[Init phase]:
+      We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
+    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
+    \item[Challenge phase]: The adversary choose two message $(m_0, m_1)$, then submits them to the challenger. The challenger choose randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and return the result ciphertext $c_b$ to the adversary.
+    \item[Query phase 2]: The adversary has the oracle access to the decryption oracle expect that when the oracle receive a ciphertext, if the result of the decryption is equal to $m_0$ or $m_1$, then the oracle returns $Replay$.
+    \item[Guessing phase]: The adversary output a bit $b'$.
+  \end{description}
+
+  The encryption scheme $\mathcal{E}$ is CCA-2 secure iff $adv(\Adv) = |\PR(b = b') - \frac{1}{2}| < negl(\lambda)$ where $negl(\lambda)$ is a negligible function \wrt $\lambda$.
+  \end{myDef}
+
+  We also define the unlinkability of the RCCA encryption scheme which is first proposed by Prabhakaran \etal~\cite{DBLP:conf/crypto/PrabhakaranR07}.
+  \begin{myDef}{Unlinkability}
+    Let RCCA encryption be the following four algorithm $(\Setup, \KeyGen, \Enc, \Dec, \Rerand)$
+    The unlinkability of RCCA encrypton scheme is defined by the wining probability of the adversary in the following game:
+    \begin{description}
+    \item[Init phase]:
+      We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
+    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
+    \item[Challenge phase]: The adversary choose outputs a ciphertext $C$, then submits it to the challenger. If $\Dec(C)\neq \bot$, the challenger choose randomly a bit $b \in \{0,1\}$, Then if $b = 0$, the challenger outputs $\Enc(\Dec(C))$, otherwise he outputs $\Rerand(C)$.
+    \item[Query phase 2]: The adversary has again the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
+    \item[Guessing phase]: The adversary output a bit $b'$.
+    \end{description}
+
+    The RCCA scheme is computational(\resp statistical) unlinkable if all PPT(\resp omnipotent) adversary has negligible advantage against the previous game. 
+  \end{myDef}
+  
+
 \end{subsection}

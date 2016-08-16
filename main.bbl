@@ -17,45 +17,146 @@
 \endgroup
 
 \sortlist[entry]{nty/global/}
-  \entry{DBLP:journals/joc/CashKS09}{article}{}
-    \name{author}{3}{}{%
-      {{hash=CD}{%
-         family={Cash},
-         family_i={C\bibinitperiod},
-         given={David},
-         given_i={D\bibinitperiod},
+  \entry{DBLP:conf/eurocrypt/AbeKOT15}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=AM}{%
+         family={Abe},
+         family_i={A\bibinitperiod},
+         given={Masayuki},
+         given_i={M\bibinitperiod},
       }}%
-      {{hash=KE}{%
-         family={Kiltz},
+      {{hash=KM}{%
+         family={Kohlweiss},
          family_i={K\bibinitperiod},
-         given={Eike},
-         given_i={E\bibinitperiod},
+         given={Markulf},
+         given_i={M\bibinitperiod},
       }}%
-      {{hash=SV}{%
-         family={Shoup},
-         family_i={S\bibinitperiod},
-         given={Victor},
-         given_i={V\bibinitperiod},
+      {{hash=OM}{%
+         family={Ohkubo},
+         family_i={O\bibinitperiod},
+         given={Miyako},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=TM}{%
+         family={Tibouchi},
+         family_i={T\bibinitperiod},
+         given={Mehdi},
+         given_i={M\bibinitperiod},
       }}%
     }
-    \strng{namehash}{CDKESV1}
-    \strng{fullhash}{CDKESV1}
+    \name{editor}{2}{}{%
+      {{hash=OE}{%
+         family={Oswald},
+         family_i={O\bibinitperiod},
+         given={Elisabeth},
+         given_i={E\bibinitperiod},
+      }}%
+      {{hash=FM}{%
+         family={Fischlin},
+         family_i={F\bibinitperiod},
+         given={Marc},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{AM+1}
+    \strng{fullhash}{AMKMOMTM1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{sortinit}{C}
-    \field{sortinithash}{C}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{booktitle}{Advances in Cryptology - {EUROCRYPT} 2015 - 34th Annual
+  International Conference on the Theory and Applications of Cryptographic
+  Techniques, Sofia, Bulgaria, April 26-30, 2015, Proceedings, Part {II}}
     \verb{doi}
-    \verb 10.1007/s00145-009-9041-6
+    \verb 10.1007/978-3-662-46803-6_2
     \endverb
-    \field{number}{4}
-    \field{pages}{470\bibrangedash 504}
-    \field{title}{The Twin Diffie-Hellman Problem and Applications}
+    \field{isbn}{978-3-662-46802-9}
+    \field{pages}{35\bibrangedash 65}
+    \field{series}{Lecture Notes in Computer Science}
+    \field{title}{Fully Structure-Preserving Signatures and Shrinking
+  Commitments}
     \verb{url}
-    \verb http://dx.doi.org/10.1007/s00145-009-9041-6
+    \verb http://dx.doi.org/10.1007/978-3-662-46803-6_2
     \endverb
-    \field{volume}{22}
-    \field{journaltitle}{J. Cryptology}
-    \field{year}{2009}
+    \field{volume}{9057}
+    \field{year}{2015}
+  \endentry
+
+  \entry{DBLP:conf/pkc/AbeDKNO13}{inproceedings}{}
+    \name{author}{5}{}{%
+      {{hash=AM}{%
+         family={Abe},
+         family_i={A\bibinitperiod},
+         given={Masayuki},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=DB}{%
+         family={David},
+         family_i={D\bibinitperiod},
+         given={Bernardo},
+         given_i={B\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kohlweiss},
+         family_i={K\bibinitperiod},
+         given={Markulf},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=NR}{%
+         family={Nishimaki},
+         family_i={N\bibinitperiod},
+         given={Ryo},
+         given_i={R\bibinitperiod},
+      }}%
+      {{hash=OM}{%
+         family={Ohkubo},
+         family_i={O\bibinitperiod},
+         given={Miyako},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \name{editor}{2}{}{%
+      {{hash=KK}{%
+         family={Kurosawa},
+         family_i={K\bibinitperiod},
+         given={Kaoru},
+         given_i={K\bibinitperiod},
+      }}%
+      {{hash=HG}{%
+         family={Hanaoka},
+         family_i={H\bibinitperiod},
+         given={Goichiro},
+         given_i={G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{AM+1}
+    \strng{fullhash}{AMDBKMNROM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{booktitle}{Public-Key Cryptography - {PKC} 2013 - 16th International
+  Conference on Practice and Theory in Public-Key Cryptography, Nara, Japan,
+  February 26 - March 1, 2013. Proceedings}
+    \verb{doi}
+    \verb 10.1007/978-3-642-36362-7_20
+    \endverb
+    \field{isbn}{978-3-642-36361-0}
+    \field{pages}{312\bibrangedash 331}
+    \field{series}{Lecture Notes in Computer Science}
+    \field{title}{Tagged One-Time Signatures: Tight Security and Optimal Tag
+  Size}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/978-3-642-36362-7_20
+    \endverb
+    \field{volume}{7778}
+    \field{year}{2013}
   \endentry
 
   \entry{DBLP:conf/eurocrypt/ChaseKLM12}{inproceedings}{}
@@ -125,99 +226,230 @@
     \field{year}{2012}
   \endentry
 
-  \entry{cryptoeprint:2015:629}{misc}{}
-    \name{author}{3}{}{%
-      {{hash=CV}{%
-         family={Cortier},
-         family_i={C\bibinitperiod},
-         given={Véronique},
-         given_i={V\bibinitperiod},
-      }}%
-      {{hash=FG}{%
-         family={Fuchsbauer},
-         family_i={F\bibinitperiod},
-         given={Georg},
-         given_i={G\bibinitperiod},
-      }}%
-      {{hash=GD}{%
-         family={Galindo},
+  \entry{DBLP:conf/ctrsa/GolleJJS04}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=GP}{%
+         family={Golle},
          family_i={G\bibinitperiod},
-         given={David},
-         given_i={D\bibinitperiod},
+         given={Philippe},
+         given_i={P\bibinitperiod},
       }}%
-    }
-    \strng{namehash}{CVFGGD1}
-    \strng{fullhash}{CVFGGD1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{sortinit}{C}
-    \field{sortinithash}{C}
-    \field{howpublished}{Cryptology ePrint Archive, Report 2015/629}
-    \field{note}{\url{http://eprint.iacr.org/2015/629}}
-    \field{title}{BeleniosRF: A Strongly Receipt-Free Electronic Voting Scheme}
-    \field{year}{2015}
-  \endentry
-
-  \entry{DBLP:conf/crypto/DodisMS16}{inproceedings}{}
-    \name{author}{3}{}{%
-      {{hash=DY}{%
-         family={Dodis},
-         family_i={D\bibinitperiod},
-         given={Yevgeniy},
-         given_i={Y\bibinitperiod},
-      }}%
-      {{hash=MI}{%
-         family={Mironov},
-         family_i={M\bibinitperiod},
-         given={Ilya},
-         given_i={I\bibinitperiod},
-      }}%
-      {{hash=SN}{%
-         family={Stephens{-}Davidowitz},
-         family_i={S\bibinitperiod},
-         given={Noah},
-         given_i={N\bibinitperiod},
-      }}%
-    }
-    \name{editor}{2}{}{%
-      {{hash=RM}{%
-         family={Robshaw},
-         family_i={R\bibinitperiod},
-         given={Matthew},
+      {{hash=JM}{%
+         family={Jakobsson},
+         family_i={J\bibinitperiod},
+         given={Markus},
          given_i={M\bibinitperiod},
       }}%
-      {{hash=KJ}{%
-         family={Katz},
-         family_i={K\bibinitperiod},
-         given={Jonathan},
-         given_i={J\bibinitperiod},
+      {{hash=JA}{%
+         family={Juels},
+         family_i={J\bibinitperiod},
+         given={Ari},
+         given_i={A\bibinitperiod},
+      }}%
+      {{hash=SPF}{%
+         family={Syverson},
+         family_i={S\bibinitperiod},
+         given={Paul\bibnamedelima F.},
+         given_i={P\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \name{editor}{1}{}{%
+      {{hash=OT}{%
+         family={Okamoto},
+         family_i={O\bibinitperiod},
+         given={Tatsuaki},
+         given_i={T\bibinitperiod},
       }}%
     }
     \list{publisher}{1}{%
       {Springer}%
     }
-    \strng{namehash}{DYMISN1}
-    \strng{fullhash}{DYMISN1}
+    \strng{namehash}{GP+1}
+    \strng{fullhash}{GPJMJASPF1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{sortinit}{D}
-    \field{sortinithash}{D}
-    \field{booktitle}{Advances in Cryptology - {CRYPTO} 2016 - 36th Annual
-  International Cryptology Conference, Santa Barbara, CA, USA, August 14-18,
-  2016, Proceedings, Part {I}}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{booktitle}{Topics in Cryptology - {CT-RSA} 2004, The Cryptographers'
+  Track at the {RSA} Conference 2004, San Francisco, CA, USA, February 23-27,
+  2004, Proceedings}
     \verb{doi}
-    \verb 10.1007/978-3-662-53018-4_13
+    \verb 10.1007/978-3-540-24660-2_14
     \endverb
-    \field{isbn}{978-3-662-53017-7}
-    \field{pages}{341\bibrangedash 372}
+    \field{isbn}{3-540-20996-4}
+    \field{pages}{163\bibrangedash 178}
     \field{series}{Lecture Notes in Computer Science}
-    \field{title}{Message Transmission with Reverse Firewalls - Secure
-  Communication on Corrupted Machines}
+    \field{title}{Universal Re-encryption for Mixnets}
     \verb{url}
-    \verb http://dx.doi.org/10.1007/978-3-662-53018-4_13
+    \verb http://dx.doi.org/10.1007/978-3-540-24660-2_14
     \endverb
-    \field{volume}{9814}
-    \field{year}{2016}
+    \field{volume}{2964}
+    \field{year}{2004}
+  \endentry
+
+  \entry{DBLP:conf/crypto/LibertPJY13}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=LB}{%
+         family={Libert},
+         family_i={L\bibinitperiod},
+         given={Beno{\^{\i}}t},
+         given_i={B\bibinitperiod},
+      }}%
+      {{hash=PT}{%
+         family={Peters},
+         family_i={P\bibinitperiod},
+         given={Thomas},
+         given_i={T\bibinitperiod},
+      }}%
+      {{hash=JM}{%
+         family={Joye},
+         family_i={J\bibinitperiod},
+         given={Marc},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=YM}{%
+         family={Yung},
+         family_i={Y\bibinitperiod},
+         given={Moti},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \name{editor}{2}{}{%
+      {{hash=CR}{%
+         family={Canetti},
+         family_i={C\bibinitperiod},
+         given={Ran},
+         given_i={R\bibinitperiod},
+      }}%
+      {{hash=GJA}{%
+         family={Garay},
+         family_i={G\bibinitperiod},
+         given={Juan\bibnamedelima A.},
+         given_i={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{LB+1}
+    \strng{fullhash}{LBPTJMYM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \field{booktitle}{Advances in Cryptology - {CRYPTO} 2013 - 33rd Annual
+  Cryptology Conference, Santa Barbara, CA, USA, August 18-22, 2013.
+  Proceedings, Part {II}}
+    \verb{doi}
+    \verb 10.1007/978-3-642-40084-1_17
+    \endverb
+    \field{isbn}{978-3-642-40083-4}
+    \field{pages}{289\bibrangedash 307}
+    \field{series}{Lecture Notes in Computer Science}
+    \field{title}{Linearly Homomorphic Structure-Preserving Signatures and
+  Their Applications}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/978-3-642-40084-1_17
+    \endverb
+    \field{volume}{8043}
+    \field{year}{2013}
+  \endentry
+
+  \entry{DBLP:journals/dcc/LibertPJY15}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LB}{%
+         family={Libert},
+         family_i={L\bibinitperiod},
+         given={Beno{\^{\i}}t},
+         given_i={B\bibinitperiod},
+      }}%
+      {{hash=PT}{%
+         family={Peters},
+         family_i={P\bibinitperiod},
+         given={Thomas},
+         given_i={T\bibinitperiod},
+      }}%
+      {{hash=JM}{%
+         family={Joye},
+         family_i={J\bibinitperiod},
+         given={Marc},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=YM}{%
+         family={Yung},
+         family_i={Y\bibinitperiod},
+         given={Moti},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LB+1}
+    \strng{fullhash}{LBPTJMYM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \verb{doi}
+    \verb 10.1007/s10623-015-0079-1
+    \endverb
+    \field{number}{2-3}
+    \field{pages}{441\bibrangedash 477}
+    \field{title}{Linearly homomorphic structure-preserving signatures and
+  their applications}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/s10623-015-0079-1
+    \endverb
+    \field{volume}{77}
+    \field{journaltitle}{Des. Codes Cryptography}
+    \field{year}{2015}
+  \endentry
+
+  \entry{DBLP:conf/crypto/PrabhakaranR07}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=PM}{%
+         family={Prabhakaran},
+         family_i={P\bibinitperiod},
+         given={Manoj},
+         given_i={M\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Rosulek},
+         family_i={R\bibinitperiod},
+         given={Mike},
+         given_i={M\bibinitperiod},
+      }}%
+    }
+    \name{editor}{1}{}{%
+      {{hash=MA}{%
+         family={Menezes},
+         family_i={M\bibinitperiod},
+         given={Alfred},
+         given_i={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{PMRM1}
+    \strng{fullhash}{PMRM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{booktitle}{Advances in Cryptology - {CRYPTO} 2007, 27th Annual
+  International Cryptology Conference, Santa Barbara, CA, USA, August 19-23,
+  2007, Proceedings}
+    \verb{doi}
+    \verb 10.1007/978-3-540-74143-5_29
+    \endverb
+    \field{isbn}{978-3-540-74142-8}
+    \field{pages}{517\bibrangedash 534}
+    \field{series}{Lecture Notes in Computer Science}
+    \field{title}{Rerandomizable {RCCA} Encryption}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/978-3-540-74143-5_29
+    \endverb
+    \field{volume}{4622}
+    \field{year}{2007}
   \endentry
 
   \entry{shannon-otp}{article}{}

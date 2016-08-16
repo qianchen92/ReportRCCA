@@ -1,0 +1,218 @@
+\begin{description}
+\item[\boldmath{$RCCA2.\KeyGen(1^\lambda)$}]:
+  \begin{enumerate}
+  \item Choose a asymmetric pairing group system $(\G, \hat{\G}, \G_T)$, groups of prime order $p > 2^\lambda$.
+  \item Set $\PPP$ as $(\G, \hat{\G}, \G_T)$.
+  \item Choose also group generators $g_1, g_2 \sample \G$ and random values $x_1, x_2 \sample \mathbb{Z}_p$.
+  \item Generate group generator $\hat{g} \sample \hat{\G}$
+  \item Set $X = g_1^{x_1}g_2^{x_2}$.
+  \item Generate random values $(\rho_u, \rho_u') \sample \mathbb{Z}_p^2$ and random group generators $(\hat{g}, \hat{h}) \sample \hat{\G}^2$.
+  \item Set $(\vec{u}_1, \vec{u}_2)$ as $\vec{u}_1 = (\hat{g}, \hat{h}) \in \hat{\G}^2$ and $\vec{u}_2 = (\vec{u}_1)^{\rho_u} = (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2$. Note that $\vec{u}_1$ and $\vec{u}_2$ are linearly independent with overwhelming probability.
+  \item $\PPP_{TC} = (\PPP, g_1, \hat{g}, \ell = 6)$.
+  \item Generate the commitment key $\vec{\ck} \in \hat{\G}^8$ and $\vec{\tk} \in \mathbb{Z}_p^8$.
+  \item Generate a pair of Groth-Sahai commitment parameters$(\PPP_{GS}) = (\vec{g}_r, \vec{g}_s)$.
+  \item We output the public parameters $\PPP =  (g_1, g_2, \PPP_{TC}, \vec{\ck}, \PPP_{GS})$.
+  \item $\SK = (x_1, x_2)$
+  \item $\PK = (\vec{u}_1, \vec{u}_2, X)$
+  \end{enumerate}
+\item[\boldmath{$RCCA2.\Enc(\PPP,M,\PK)$}]:
+  \begin{enumerate}
+  \item Generate the LHSPS signature keys $(\SSK, \SVK) \gets LHSPS.\KeyGen(\PPP)$ with $\SSK = (\{\chi_i, \gamma_i\}_{i=1}^3) \in \mathbb{Z}_p^{8}$ and $\SVK = (\{\SVK_i\}_{i=1}^4) = (\{\hat{g}_i\}_{i =1}^4) \in \hat{\G}^4$.
+  \item Choose $\theta \sample \mathbb{Z}_p$ and compute
+    \begin{align*}
+      C_0 &= M\cdot X^{\theta}, & C_1 &= g_1^{\theta}, & C_2 &= g_2^{\theta}.
+    \end{align*}
+  \item Generate commitment and open of the verification key $\SVK$, 
+    $$(\com, \open) \gets TC.\Com(\PPP_{TC}, \vec{ck}, \SVK) \in \hat{\G} \times (\G^7 \times \hat{\G}^2)$$
+  \item Construct the proof vector $\vec{u}_{\com} = \vec{u}_2\cdot (1, \com)$.
+  \item Generate the commitment $\vec{C}_{\SVK}, \vec{C}_{\com}, \vec{C}_{\open}$ of $\SVK, \com, \open$ with respect to $\PPP_{GS}$.
+  \item Generate $(r,s) \sample \mathbb{Z}_p$. Compute $\vec{C}_{\theta} = \vec{u}_{\com}^{\theta} \cdot (\vec{u}_1)^r$ and $\vec{C}_{1} = \vec{u}_{\com} \cdot (\vec{u}_1)^s$.
+  \item Note that we have the commitment of $\com$ is $\vec{C}_{\com} = (1, \com) \cdot \vec{g}_r^{r_{\com}} \cdot \vec{g}_s^{s_{\com}}$.
+  \item Using $\vec{C}_{\theta}$ to get two GS proofs $(\vec{\pi}_{\theta}, \vec{\pi}_1)$:
+
+    \begin{align*}
+      \vec{\pi}_{\theta} &= (\vec{\pi}_{\theta,1}, \vec{\pi}_{\theta,2})\\
+      &= ((\pi_{\theta,1,1}, \pi_{\theta,1,2}, \pi_{\theta,1,3}), (\pi_{\theta,2,1}, \pi_{\theta,2,2}, \pi_{\theta,2,3}))\\
+      &= ((g_1^r, C_1^{r_{\com}}, C_1^{s_{\com}}),(g_2^r, C_2^{r_{\com}}, C_2^{s_{\com}}))\\     
+      \vec{\pi}_{1} &= (\pi_{1,1,1}, \pi_{1,1,2})\\
+      &= ((\pi_{1,1,1}, \pi_{1,1,2}, \pi_{1,1,3}), (\pi_{1,2,1}, \pi_{1,2,2}, \pi_{1,2,3}))\\
+      &= ((g_1^s, g_1^{r_{\com}}, g_1^{s_{\com}}),(g_2^s, g_2^{r_{\com}}, g_2^{s_{\com}}))
+    \end{align*}
+
+    of
+    
+    \begin{align*}
+      C_1 &= g_1^{\theta} & C_2 &= g_2^{\theta}
+    \end{align*}
+
+    which verifies:
+    \begin{align*}
+      E(g_1, \vec{C}_{\theta}) &= E(C_1, \vec{u}_2) \cdot E(C_1, \boxed{\vec{C}_{\com}}) \cdot E(\pi_{\theta,1,1}, \vec{u}_1) \cdot E(\pi_{\theta,1,2}, \vec{g}_r) \cdot E(\pi_{\theta,1,3}, \vec{g}_s)\\
+      E(g_2, \vec{C}_{\theta}) &= E(C_2, \vec{u}_2) \cdot E(C_2, \boxed{\vec{C}_{\com}}) \cdot E(\pi_{\theta,2,1}, \vec{u}_1) \cdot E(\pi_{\theta,2,2}, \vec{g}_r) \cdot E(\pi_{\theta,2,3}, \vec{g}_s)\\
+      E(g_1, \vec{C}_{1}) &= E(g_1, \vec{u}_2) \cdot E(g_1, \boxed{\vec{C}_{\com}}) \cdot E(\pi_{1,1,1}, \vec{u}_1) \cdot E(\pi_{1,1,2}, \vec{g}_r) \cdot E(\pi_{1,1,3}, \vec{g}_s)\\
+      E(g_2, \vec{C}_{1}) &= E(g_2, \vec{u}_2) \cdot E(g_2, \boxed{\vec{C}_{\com}}) \cdot E(\pi_{1,2,1}, \vec{u}_1) \cdot E(\pi_{1,2,2}, \vec{g}_r) \cdot E(\pi_{1,2,3}, \vec{g}_s)
+    \end{align*}
+  \item We also compute the signature $\vec{\sigma}_1 = (z_1, r_1)$ of the vector $(g, X, g_1, g_2)$ and the signature $\vec{\sigma}_m = (z_m, r_m)$ of the vector $(1, C_0, C_1, C_2)$.
+  \item Generate the proof $(\vec{\pi}_{\com}, \vec{\pi}_{\vec{\sigma}_1}, \vec{\pi}_{\vec{\sigma}_m})$ of the following equations:
+    \begin{align*}
+      TC.\Verif(\ck, \com, \SVK, \open) &= \True\\
+      LHSPS.\Verif(\SVK, (g, X, g_1, g_2), \vec{\sigma}_1) &= \True\\
+      LHSPS.\Verif(\SVK, (1, C_0, C_1, C_2), \vec{\sigma}_m) &= \True\\
+    \end{align*}
+    
+    More explicitly, We parse $\open$ as $(D, g_z, g_1, g_2, g_3, g_4, \ovk_{POS}, \hat{Z}, \hat{R}) \in \G^7 \times \hat{\G}^2$, then we have $\vec{C}_{\open} \in \G^{14} \times \hat{\G}^4$, then we proof the following equations:
+    \begin{align*}
+      e(g, \boxed{\hat{C}}) &= e(\boxed{D}, \hat{g}) \prod_{i = 1}^{4} e(\boxed{\SVK_i}, \boxed{\hat{X}_i}) \cdot e(\boxed{g_z}, \boxed{\hat{X}_5}) \cdot e(\boxed{\ovk_{POS}}, \boxed{\hat{X}_6}) \\
+      e(\boxed{\ovk_{POS}}, \hat{g}) &= e(\boxed{g_z}, \boxed{\hat{Z}}) \cdot e(g, \boxed{\hat{R}}) \cdot \prod_{i = 1}^4 e(\boxed{g_i}, \boxed{\SVK_i}) 
+    \end{align*}
+    Then we have $\pi_{\com} \in \G^2 \times \hat{\G}^2$.
+
+  \item Then we prove the following equations:
+    \begin{align}
+      e(z_1, \hat{g}_z) \cdot e(r_1, \hat{g}_r) &= e(g, \boxed{\SVK_1}) \cdot e(X, \boxed{\SVK_2}) \cdot e(g_0, \boxed{\SVK_3}) \cdot e(g_1, \boxed{\SVK_4}) \label{z1}\\
+      e(z_m, \hat{g}_z) \cdot e(r_m, \hat{g}_r) &= e(1, \boxed{\SVK_1}) \cdot e(C_0, \boxed{\SVK_2}) \cdot e(C_1, \boxed{\SVK_3}) \cdot e(C_2, \boxed{\SVK_4}) \label{zm}
+    \end{align}
+
+    Thus we have $(\vec{\pi}_{\vec{\sigma}_1}, \vec{\pi}_{\vec{\sigma}_m}) \in \G^2 \times \G^2$
+  
+  \item Output the ciphertext
+    \begin{align*}
+      \vec{C} = (C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}_{\theta}, \vec{\pi}_{1}, \vec{\sigma}_1, \vec{\sigma}_m, \vec{C}_{\SVK}, \vec{C}_{\com}, \vec{C}_1, \vec{C}_{\open},  \vec{\pi}_{\com}, \vec{\pi}_{\vec{\sigma}_1}, \vec{\pi}_{\vec{\sigma}_m}, \vec{\pi}_{\theta}) \in \G^{39} \times \hat{\G}^{20}
+    \end{align*}
+    
+
+    
+  \end{enumerate}
+  
+\item[\boldmath{$RCCA2.\Dec(\PK, \vec{C}, \SK)$}]:
+  \begin{enumerate}
+  \item Parse $\PK$ with $(\vec{g}_1, \vec{g}_2, X, \PPP_{TC}, \ck)$ and $\SK$ with $(x_1, x_2)$.
+  \item Parse $\vec{C}$ with $\vec{C} = (C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma}_1, \vec{\sigma}_m, \vec{C}_{\SVK}, \vec{C}_{\com}, \vec{C}_{\open},  \vec{\pi}_{\com}, \vec{\pi}_{\vec{\sigma}_1}, \vec{\pi}_{\vec{\sigma}_m})$.
+  \item Verify that $\vec{\pi}_{\vec{\sigma}_1}$ is a valid Groth-Sahai proof \wrt the commitments $(\vec{C}_{\SVK})$ for the equation \ref{z1}.
+  \item Verify that $\vec{\pi}_{\vec{\sigma}_m}$ is a valid Groth-Sahai proof \wrt the commitments $(\vec{C}_{\SVK})$ for the equation \ref{zm}.
+  \item If any of the verification fails then halt and return $\bot$, otherwise, output $C_0/(C_1^{x_1}\cdot C_2^{x_2})$.
+  \end{enumerate}
+
+
+\item[\boldmath{$RCCA2.\Rerand$}]:
+  \begin{enumerate}
+  \item We choose randomly a value $r' \sample \mathbb{Z}_p$.
+  \item We update $\vec{C}$ by $\vec{C}'  = (C_1 \cdot f^{r'}, C_2 \cdot g^{r'}, C_3 \cdot h^{r'})$.
+  \item Compute the new signature $\vec{\sigma}_m' = \vec{\sigma}_m \cdot \vec{\sigma}_1^{r'}$
+  \item Compute the new proof $\vec{\pi}_{\vec{\sigma}_m}' = \vec{\pi}_{\vec{\sigma}_m} \cdot \vec{\pi}_{\vec{\sigma}_1}^{r'}$
+  \item Update the commitment $\vec{C}_{\theta}' = \vec{C}_{\theta} \cdot \vec{C}_{1}^{r'}$. We also update the proof $\vec{\pi}_{\theta}' = \vec{\pi}_{\theta} \cdot \vec{\pi}_{1}^{r'}$.
+  \item Then we randomize all the commitments and GS proofs.
+  \end{enumerate}
+  
+\end{description}
+
+
+\begin{myTh}
+  $RCCA2$ scheme is secure against RCCA security under SXDH assumption.
+\end{myTh}
+
+\begin{proof}
+
+  This will be a game based proof. From the first game which is the definition of the RCCA security game to the last game, in which the adversary can trivially not have any advantage. In the $i$-th game, we define the advantage of the adversary by $S_i$.
+
+  \begin{description}
+  \item[\textsf{Game} $0$ :] This is the real game, the adversary is against the RCCA security game. We give the adversary the public key $\PK$ of the encryption scheme which contains the proof vectors $(\vec{u}_1, \vec{u}_2)$ which verifies:
+    \begin{align*}
+      \vec{u}_1 &= (\hat{g}, \hat{h}) \in \hat{\G}^2\\
+      \vec{u}_2 &= (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2
+    \end{align*}
+
+    The adversary has the access to the decryption oracle.
+    
+    Then during the challenge phase, the adversary choose two messages $(m_0, m_1) \in \G^2$ submits to the Challenger and obtains a challenge ciphertext
+    \begin{align*}
+      \vec{C}^* = (C_0^*, C_1^*, C_2^*, \vec{C}_{\theta}^*, \vec{\pi}_{\theta}^*, \vec{\pi}_{1}^*, \vec{\sigma}_1^*, \vec{\sigma}_m^*, \vec{C}_{\SVK}^*, \vec{C}_{\com}^*, \vec{C}_1^*, \vec{C}_{\open}^*, \vec{\pi}_{\com}^*, \vec{\pi}_{\vec{\sigma}_1}^*, \vec{\pi}_{\vec{\sigma}_m}^*, \vec{\pi}_{\theta}^*)
+    \end{align*}
+    especially we have:
+    \begin{align*}
+      C_0^* &= m_b \cdot X^{\theta^*} & C_1^* &= g_1^{\theta^*} & C_2^* &= g_2^{\theta^*}.
+    \end{align*}
+
+    The adversary has the access to the decryption oracle expect the ciphertext $\vec{C}$ corresponded to the ciphertext $m_0$ or $m_1$.
+
+    At the end, the adversary outputs a bit $b'$, it's advantage against the RCCA security game is defined by the wining probability of $S_0 = |\PR[b' = b] - \frac{1}{2}|$.
+
+  \item[\textsf{Game} $1$ :] In this game, the challenger generate the signing key and verification key pair and the commitment $\com^*$ of the signature's verification key at the beginning of the game. Since this does not change the view of the adversary then we have $S_0 = S_1$.
+
+  \item[\textsf{Game} $2$ :] In the $\KeyGen$ algorithm, we modify the generation of the public key. Instead of generate $(\vec{u}_1, \vec{u}_2)$ as in the \textsf{Game} 0, we define:
+    \begin{align*}
+      \vec{u}_1 &= (\hat{g}, \hat{h}) \in \hat{\G}^2\\
+      \vec{u}_2 &= (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \cdot (1, (\com^*)^{-1}) \in \hat{\G}^2
+    \end{align*}
+
+    Since $\vec{u}_2$ always distributed uniformly over $\hat{\G}^2$, this change does not affect the view of the adversary. Thus we have $S_2 = S_1$.
+
+  \item[\textsf{Game} $3$ :] In this game, we change the public parameter $\PPP_{GS}$ of the underlying Groth-Sahai proof system to the perfect binding setting. Due to the witness indistinguishable property, we have $|S_3 - S_2| \leq adv_{\mathcal{B}}^{wit-IND}(\lambda)$.
+
+  \item[\textsf{Game} $4$ :] In this game, we define a failure event $F_4$: the ciphertext submitted by the adversary to the decryption oracle during the first query phase(before the challenge phase) contains the commitment $\vec{C}_{\com}$ which verifies $\com = \com^*$.
+
+    If the event $F_4$ happens, then the experiment halts and outputs a random bit. Since $\com^*$ is chosen uniformly in the space $\hat{\G}$, and remains independent from the adversary's view until the challenge phase, then we have $|S_4 - S_3| \leq \PR[F_4] \leq q_D/p$ where $q_D$ represents the number of decryption queries before the challenge phase $p$ is the order of the group $\hat{\G}$.
+
+  \item[\textsf{Game} $5$ :] In this game, we modify the decryption oracle during the second query phase, let us denote the event $F_5$: the ciphertext submitted by the adversary to the decryption oracle during the second query phase contains the commitments $(\vec{C}_{\com}, \vec{C}_{\open})$ which verifies $\com = \com^*$ but $\open \neq \open^*$.
+
+    The experiment halts if $F_5$ occurs and outputs a random bit. Thus we have $|S_5- S_4| \leq \PR[F_5]$.
+
+    And if $F_5$ occurs, we can easily construct an adversary $\mathcal{B}$ of the target collision-resistance of the underlying structure-preserving trapdoor commitment $TC$ which contradicts the Double Pairing assumption.
+
+    Thus we have $|S_5 - S_4| \leq \PR[F_2] \leq adv_{\mathcal{B}}^{TCR-CR}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$. 
+
+  \item[\textsf{Game} $6$ :] We modify again the decryption oracle during the second query phase. During the second query phase, the ciphertext submitted by the adversary contains $(\vec{C}_\com, \vec{C}_\open)$ such that $\com = \com^*$ and $\open = \open^*$ but $(C_0, C_1, C_2)$ does not verify that $(C_0/ C_0^*, C_1/C_1^*, C_2/C_2^*) \in Span((X, g_1, g_2))$ and pass all other verification, we denote this event $F_6$. If $F_6$ occurs, the experiment halts and outputs a random bit. Thus we have $|S_6 - S_5| \leq \PR[F_6]$. The event $F_6$ is contradict the strong unforgeability of the underlying LHSPS signature(The GS proof is in the perfect binding setting, if $F_6$ occurs, we can extract a signature which is not in the subspace $Span((g, C_0, C_1, C_2), (a, X, g_1, g_2))$). Thus we have $|S_6 - S_5| \leq adv_{\mathcal{B}}^{SUF-OTLHS}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$.
+    
+    
+  \item[\textsf{Game} $7$ :] In this game, we modify the distribution of the public keys. We compute the public keys $(\vec{u}_1, \vec{u}_2)$ in the following way:
+    \begin{align*}
+      \vec{u}_1 &= (\hat{g}, \hat{h}) \in \hat{\G}^2\\
+      \vec{u}_1 &= (\hat{g}^{\rho_u}, \hat{h}^{\rho_u}) \cdot (1, \com^{-1}) \in \hat{\G}^2
+    \end{align*}
+
+    Since the Challenger does not use $\rho_u$ or $\rho_u'$ in the security game, thus an adversary who can make difference between \textsf{Game} $6$ and \textsf{Game} $7$, is an adversary agains the DDH assumption in $\hat{\G}$. Thus we have $|S_6 - S_5| \leq adv_{\mathcal{B}}^{DDH}(\lambda)$.
+
+  \item[\textsf{Game} $8$ :] In this game, instead of generate the proof $(\vec{\pi}_{\theta^*, 1, 1}, \vec{\pi}_{\theta^*, 2, 1})$ using the witness $\theta^*$, we generate a random value $r \sample \mathbb{Z}_p^*$ and generate $(\vec{C}_{\theta^*}, \vec{\pi}_{\theta^*,1,1}, \vec{\pi}_{\theta^*,2,1})$ as following:
+    \begin{align*}
+      \vec{C}_{\theta^*} &= \vec{u}_1^r & \vec{\pi}_{\theta^*,1,1} &= g_1^r \cdot C_1^{*-\rho_u} & \vec{\pi}_{\theta^*,2,1} &= g_2^r \cdot C_2^{*-\rho_u}
+    \end{align*}
+
+    Notice that even the proof elements are generated without using the witness $\theta^* = log_{g_1}(C_1^*) = log_{g_2}(C_2^*)$. The distribution of the proof is remain the same as in the original proof. In fact, let us define $\tilde{r} = r - \rho_u \cdot \theta^*$, we have:
+    \begin{align*}
+      \vec{C}_{\theta}^* &= \vec{u}_{\com}^{\theta^*} \cdot \vec{u}_1^{\tilde{r}} &  \vec{\pi}_{\theta^*,1,1} &= g_1^{\tilde{r}} & \vec{\pi}_{\theta^*,2,1} &= g_2^{\tilde{r}}
+    \end{align*}
+
+    Thus we have $S_8 = S_7$.
+
+  \item[\textsf{Game} $9$ :] In this game, we modify the ciphertext generation in the challenge phase. Instead of compute the ciphertext using the public key $(X, g_1, g_2)$, we generate it with the secret key $(x_1, x_2)$:
+    \begin{align*}
+      C_1^* &= g_1^{\theta^*} & C_2^* &= g_2^{\theta^*} & C_0 &= M_b\cdot C_1^{*x_1} \cdot C_2^{*x_2}  
+    \end{align*}
+    Since the ciphertext remains exactly the same as in the \textsf{Game} $8$. Thus this modification does not change the view of the adversary, which means $S_9 = S_8$.
+
+
+  \item[\textsf{Game} $10$ :] In this game, we modify again the ciphertext generation in the challenge phase. Recall that since the \textsf{Game} $8$, we don't use anymore $\theta^{*}$ to generate $(\vec{C}_{\theta^*}, \vec{\pi}_{\theta^*,1,1}, \vec{\pi}_{\theta^*,2,1})$, then we generate two random values $(\theta_1, \theta_2) \sample \mathbb{Z}_p^2$ and compute the ciphertext as following:
+    \begin{align*}
+      C_1 &= g_1^{\theta_1} & C_2 &= g_2^{\theta_2} & C_0 &= m_b \cdot C_1^{x_1} \cdot C_2^{x_2}
+    \end{align*}
+
+    As we don't use anymore $\theta_1$ nor $\theta_2$ in the whole game, we can easily construct a reduction from an adversary who can make difference between \textsf{Game} $10$ and \textsf{Game} $9$ to an adversary against the DDH assumption. Thus we have $|S_{10} - S_9| \leq adv_{\mathcal{B}}^{DDH}(\lambda)$.
+    
+  \end{description}
+
+  Notice that in the final game, the ciphertext component is as follows:
+  \begin{align*}
+    C_1 &= g_1^{\theta^*} & C_2 &= g_2^{\theta^*+ \theta'} & C_0 &= m_b \cdot X_1^{\theta^*} \cdot g_2^{x_2 \cdot \theta'}
+  \end{align*}
+
+  As $x_2$ is completely independent of the adversary's view, $C_0$ can be seen as a one-time pad of the message $m_b$. Thus the adversary does not have any information about the bit $b$. Then we have $S_{10} = 0$.
+
+  For summary, we have
+  \begin{align*}
+    adv_{\mathcal{A}}^{RCCA}(\lambda) &= S_0\\
+    &\leq S_{10} + 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{wit-IND}(\lambda)\\
+    &= 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{wit-IND}(\lambda) \in negl(\lambda)
+  \end{align*}
+\end{proof}
+
+\input{proofRCCA2}

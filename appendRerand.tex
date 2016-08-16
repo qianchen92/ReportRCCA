@@ -1,0 +1,626 @@
+\subsection{Construction}
+
+\begin{description}
+\item[First Stage]: Rerandomize the ciphertext and update the proofs.
+  \begin{enumerate}
+  \item To update the proofs we need the old proof elements of the equations $(13, 14, 15)$. We first explicit the proofs elements for these equations:
+    \begin{enumerate}
+    \item Equation 13:
+
+      $e(\boxed{d^b},h) = e(\boxed{H}, d)$: 
+      
+      The Verification equation is: $E(\vec{C}_b, \iota(h)) = E(\vec{C}_{H}, d) \cdot E(\iota(\pi_{13,1}), \vec{g}_1)\cdot E(\iota(\pi_{13,2}), \vec{g}_2)\cdot E(\iota(\pi_{13,3}), \vec{g}_3)$
+
+      with
+      \begin{itemize}
+      \item[$\pi_{13,1} = $] $h^{r_{d^b}} \cdot d^{-r_{H}}$
+      \item[$\pi_{13,2} = $] $h^{s_{d^b}} \cdot d^{-s_{H}}$
+      \item[$\pi_{13,3} = $] $h^{t_{d^b}} \cdot d^{-t_{H}}$
+      \end{itemize}
+      
+    \item Equation 14:
+
+      $e(\boxed{F},d) = e(f, \boxed{d^b})$
+
+      The Verification equation is: $E(\vec{C}_F, \iota(d)) = E(\iota(f), \vec{C}_{d^b}) \cdot E(\iota(\pi_{14,1}), \vec{g}_1)\cdot E(\iota(\pi_{14,2}), \vec{g}_2)\cdot E(\iota(\pi_{14,3}), \vec{g}_3)$
+
+      with
+
+      \begin{itemize}
+      \item[$\pi_{14,1} = $] $d^{r_F} \cdot f^{-r_{d^b}}$    
+      \item[$\pi_{14,2} = $] $d^{s_F} \cdot f^{-s_{d^b}}$    
+      \item[$\pi_{14,3} = $] $d^{t_F} \cdot f^{-t_{d^b}}$
+      \end{itemize}
+      
+    \item Equation 15:
+
+      $e(\boxed{G},d) = e(g, \boxed{d^b})$
+
+      The Verification equation is: $E(\vec{C}_G, \iota(d)) = E(\iota(g), \vec{C}_{d^b}) \cdot E(\iota(\pi_{15,1}), \vec{g}_1)\cdot E(\iota(\pi_{15,2}), \vec{g}_2)\cdot E(\iota(\pi_{15,3}), \vec{g}_3)$
+
+      with
+
+      \begin{itemize}
+      \item[$\pi_{15,1} = $] $d^{r_G} \cdot g^{-r_{d^b}}$    
+      \item[$\pi_{15,1} = $] $d^{s_G} \cdot g^{-s_{d^b}}$    
+      \item[$\pi_{15,1} = $] $d^{t_G} \cdot g^{-t_{d^b}}$
+      \end{itemize}
+
+    \end{enumerate}
+
+  \item We generate two new random values $(\theta_1', \theta_2')$, and compute the new ciphertext vector $\vec{C}' = (C_1', C_2', C_3') = (C_1 \cdot f^{\theta_1'}, C_2 \cdot g^{\theta_2'}, C_3 \cdot h^{\theta_1'+\theta_2'})$. We compute the new commitments, then update the proofs for the equation $(2, 3, 4, 5, 6, 7, 8, 9, 10)$. Update the commitments:
+    \begin{enumerate}
+    \item $\vec{C}_{\Delta_1}' = \vec{C}_{\Delta_1} \cdot \vec{C}_{F}^{\theta_1'}$
+    \item $\vec{C}_{\Delta_2}' = \vec{C}_{\Delta_2} \cdot \vec{C}_{G}^{\theta_2'}$
+    \item $\vec{C}_{\Delta_3}' = \vec{C}_{\Delta_3} \cdot \vec{C}_{H}^{\theta_1' + \theta_2'}$
+    \item $\vec{C}_{R_1}' = \vec{C}_{R_1} \cdot \vec{C}_{d^b}^{\theta_1'}$
+    \item $\vec{C}_{R_2}' = \vec{C}_{R_2} \cdot \vec{C}_{d^b}^{\theta_2'}$
+    \item $\vec{C}_{S_1}' = \vec{C}_{S_1} \cdot \vec{C}_{d^b}^{\theta_1'}$
+    \item $\vec{C}_{S_2}' = \vec{C}_{S_2} \cdot \vec{C}_{d^b}^{\theta_2'}$
+    \end{enumerate}
+    \begin{enumerate}
+      %2
+    \item Equation 2:
+
+      $e(\boxed{\Delta_1},d) = e(C_1, \boxed{d^b})$:
+      
+      The Verification equation is:  $E(\vec{C}_{\Delta_1}, \iota(d)) = E(\iota(C_1), \vec{C}_{d^b}) \cdot E(\iota(\pi_{2,1}), \vec{g}_1)\cdot E(\iota(\pi_{2,2}), \vec{g}_2)\cdot E(\iota(\pi_{2,3}), \vec{g}_3)$
+      
+      with
+      \begin{itemize}
+      \item[$\pi_{2,1} = $] $d^{r_{\Delta_1}} \cdot C_1^{-r_{d^b}}$
+      \item[$\pi_{2,2} = $] $d^{s_{\Delta_1}} \cdot C_1^{-s_{d^b}}$
+      \item[$\pi_{2,3} = $] $d^{t_{\Delta_1}} \cdot C_1^{-t_{d^b}}$
+      \end{itemize}
+
+      The new proofs of the equations are:
+      
+      \begin{itemize}
+      \item[$\pi_{2,1}' = $] $d^{r_{\Delta_1} + r_{\Delta_1}'} \cdot C_1^{-r_{d^b}} \cdot f^{-r_{d^b} \cdot \theta_1'}$    
+      \item[$\pi_{2,2}' = $] $d^{s_{\Delta_1} + s_{\Delta_1}'} \cdot C_1^{-s_{d^b}} \cdot f^{-s_{d^b} \cdot \theta_1'}$    
+      \item[$\pi_{2,3}' = $] $d^{t_{\Delta_1} + t_{\Delta_1}'} \cdot C_1^{-t_{d^b}} \cdot f^{-t_{d^b} \cdot \theta_1'}$
+      \end{itemize}
+      
+      Using the proof $\vec{\pi}_{14}$, we can update the proof elements:
+      \begin{itemize}
+      \item[$\pi_{2,1}' = $] $\pi_{2,1} \cdot \pi_{14,1}^{\theta_1'}$    
+      \item[$\pi_{2,2}' = $] $\pi_{2,2} \cdot \pi_{14,2}^{\theta_1'}$    
+      \item[$\pi_{2,3}' = $] $\pi_{2,3} \cdot \pi_{14,3}^{\theta_1'}$
+      \end{itemize}
+
+
+
+      %3
+    \item Equation 3:
+      
+      $e(\boxed{\Delta_2},d) = e(C_2, \boxed{d^b})$:
+      
+      The Verification equation is:  $E(\vec{C}_{\Delta_2}, \iota(d)) = E(\iota(C_2), \vec{C}_{d^b}) \cdot E(\iota(\pi_{3,1}), \vec{g}_1)\cdot E(\iota(\pi_{3,2}), \vec{g}_2)\cdot E(\iota(\pi_{3,3}), \vec{g}_3)$
+      
+      with
+      \begin{itemize}
+      \item[$\pi_{3,1} = $] $d^{r_{\Delta_2}} \cdot C_2^{-r_{d^b}}$
+      \item[$\pi_{3,2} = $] $d^{s_{\Delta_2}} \cdot C_2^{-s_{d^b}}$
+      \item[$\pi_{3,3} = $] $d^{t_{\Delta_2}} \cdot C_2^{-t_{d^b}}$
+      \end{itemize}
+      
+      The new proofs of the equations are:
+      
+      \begin{itemize}
+      \item[$\pi'_{3,1} = $] $d^{r_{\Delta_2} + r_{\Delta_2}'} \cdot C_2^{-r_{d^b}} \cdot g^{-r_{d^b} \cdot \theta_2'}$    
+      \item[$\pi'_{3,2} = $] $d^{s_{\Delta_2} + s_{\Delta_2}'} \cdot C_2^{-s_{d^b}} \cdot g^{-s_{d^b} \cdot \theta_2'}$    
+      \item[$\pi'_{3,3} = $] $d^{t_{\Delta_2} + t_{\Delta_2}'} \cdot C_2^{-t_{d^b}} \cdot g^{-t_{d^b} \cdot \theta_2'}$
+      \end{itemize}
+
+      Using the proof $\vec{\pi}_{15}$, we can update the proof elements:
+
+      \begin{itemize}
+      \item[$\pi'_{3,1} = $] $\pi_{3,1} \cdot \pi_{15,1}^{\theta_2'}$    
+      \item[$\pi'_{3,2} = $] $\pi_{3,2} \cdot \pi_{15,2}^{\theta_2'}$    
+      \item[$\pi'_{3,3} = $] $\pi_{3,3} \cdot \pi_{15,3}^{\theta_2'}$
+      \end{itemize}
+
+
+      
+      %4
+    \item Equation 4:
+
+      $e(\boxed{\Delta_3},d) = e(C_3, \boxed{d^b})$:
+      
+      The Verification equation is:  $E(\vec{C}_{\Delta_3}, \iota(d)) = E(\iota(C_3), \vec{C}_{d^b}) \cdot E(\iota(\pi_{4,1}), \vec{g}_1)\cdot E(\iota(\pi_{4,2}), \vec{g}_2)\cdot E(\iota(\pi_{4,3}), \vec{g}_3)$
+      
+      with
+      \begin{itemize}
+      \item[$\pi_{4,1} = $] $d^{r_{\Delta_3}} \cdot C_3^{-r_{d^b}}$
+      \item[$\pi_{4,2} = $] $d^{s_{\Delta_3}} \cdot C_3^{-s_{d^b}}$
+      \item[$\pi_{4,3} = $] $d^{t_{\Delta_3}} \cdot C_3^{-t_{d^b}}$
+      \end{itemize}
+
+      The new proofs of the equations are:
+      \begin{itemize}
+      \item[$\pi_{4,1}' = $] $d^{r_{\Delta_3} + r'_{\Delta_3}} \cdot C_3^{-r_{d^b}} \cdot h^{- r_{d^b} \cdot (\theta_1'+ \theta_2')}$
+      \item[$\pi_{4,2}' = $] $d^{s_{\Delta_3} + s'_{\Delta_3}} \cdot C_3^{-s_{d^b}} \cdot h^{- s_{d^b} \cdot (\theta_1'+ \theta_2')}$
+      \item[$\pi_{4,3}' = $] $d^{t_{\Delta_3} + t'_{\Delta_3}} \cdot C_3^{-t_{d^b}} \cdot h^{- t_{d^b} \cdot (\theta_1'+ \theta_2')}$  
+      \end{itemize}
+      
+      Using the proof $\vec{\pi}_{13}$, we can update the proof elements:
+
+      \begin{itemize}
+      \item[$\pi'_{4,1} = $] $\pi_{4,1} \cdot \pi_{13,1}^{-(\theta_1' + \theta_2')}$
+      \item[$\pi'_{4,2} = $] $\pi_{4,1} \cdot \pi_{13,2}^{-(\theta_1' + \theta_2')}$
+      \item[$\pi'_{4,3} = $] $\pi_{4,1} \cdot \pi_{13,3}^{-(\theta_1' + \theta_2')}$
+      \end{itemize}
+
+      %5
+    \item Equation 5:
+
+      $e(\boxed{\Delta_1},d) = e(f, \boxed{R_1})$:
+      
+      The Verification equation is:  $E(\vec{C}_{\Delta_1}, \iota(d)) = E(\iota(f), \vec{C}_{R_1}) \cdot E(\iota(\pi_{5,1}), \vec{g}_1)\cdot E(\iota(\pi_{5,2}), \vec{g}_2)\cdot E(\iota(\pi_{5,3}), \vec{g}_3)$
+      
+      with
+      \begin{itemize}
+      \item[$\pi_{5,1} = $] $d^{r_{\Delta_1}} \cdot f^{-r_{R_1}}$
+      \item[$\pi_{5,2} = $] $d^{s_{\Delta_1}} \cdot f^{-s_{R_1}}$
+      \item[$\pi_{5,3} = $] $d^{t_{\Delta_1}} \cdot f^{-t_{R_1}}$
+      \end{itemize}
+
+      Using the proof $\vec{\pi}_{14}$ we can update the proof elements:
+      \begin{itemize}
+      \item[$\pi'_{5,1} = $] $\pi_{5,1} \cdot \pi_{14,1}^{\theta_1'}$
+      \item[$\pi'_{5,2} = $] $\pi_{5,2} \cdot \pi_{14,2}^{\theta_1'}$
+      \item[$\pi'_{5,3} = $] $\pi_{5,3} \cdot \pi_{14,3}^{\theta_1'}$
+      \end{itemize}
+
+      %6
+    \item Equation 6:
+
+      $e(\boxed{\Delta_2},d) = e(f, \boxed{R_2})$:
+
+      The Verification equation is:  $E(\vec{C}_{\Delta_2}, \iota(h)) = E(\iota(f), \vec{C}_{R_2}) \cdot E(\iota(\pi_{6,1}), \vec{g}_1)\cdot E(\iota(\pi_{6,2}), \vec{g}_2)\cdot E(\iota(\pi_{6,3}), \vec{g}_3)$
+
+      with
+      \begin{itemize}
+      \item[$\pi_{6,1} = $] $d^{r_{\Delta_2}} \cdot f^{-r_{R_2}}$
+      \item[$\pi_{6,2} = $] $d^{s_{\Delta_2}} \cdot f^{-s_{R_2}}$
+      \item[$\pi_{6,3} = $] $d^{t_{\Delta_2}} \cdot f^{-t_{R_2}}$
+      \end{itemize}
+
+      Using the proof $\vec{\pi}_{15}$ we can update the proof elements:
+      \begin{itemize}
+      \item[$\pi'_{6,1} = $] $\pi_{6,1} \cdot d^{r'_{\Delta_2}} \cdot f^{-r'_{R_2}} = \pi_{7,1} \cdot \pi_{15,1}^{\theta_2'}$
+      \item[$\pi'_{6,2} = $] $\pi_{6,2} \cdot d^{s'_{\Delta_2}} \cdot f^{-s'_{R_2}} = \pi_{7,2} \cdot \pi_{15,2}^{\theta_2'}$
+      \item[$\pi'_{6,3} = $] $\pi_{6,3} \cdot d^{t'_{\Delta_2}} \cdot f^{-t'_{R_2}} = \pi_{7,3} \cdot \pi_{15,3}^{\theta_2'}$
+      \end{itemize}
+      
+      %7
+    \item Equation 7:
+
+      $e(\boxed{\Delta_3},d) \cdot e(\boxed{M}, d^{-1})= e(\boxed{R_1}, h) \cdot e(\boxed{R_2}, h)$:
+      
+      The Verification equation is:  $E(\vec{C}_{\Delta_3}, \iota(d)) \cdot E(\vec{C}_M, \iota(d^{-1}))= E(\vec{C}_{R_1}, \iota(h)) \cdot E(\vec{C}_{R_2}, \iota(h)) \cdot E(\iota(\pi_{7,1}), \vec{g}_1)\cdot E(\iota(\pi_{7,2}), \vec{g}_2)\cdot E(\iota(\pi_{7,3}), \vec{g}_3)$
+      
+      with
+      \begin{itemize}
+      \item[$\pi_{7,1} = $] $d^{r_{\Delta_3}} \cdot d^{-r_M} \cdot h^{-r_{R_1}} \cdot h^{-r_{R_2}}$
+      \item[$\pi_{7,2} = $] $d^{s_{\Delta_3}} \cdot d^{-s_M} \cdot h^{-s_{R_1}} \cdot h^{-s_{R_2}}$
+      \item[$\pi_{7,3} = $] $d^{t_{\Delta_3}} \cdot d^{-t_M} \cdot h^{-t_{R_1}} \cdot h^{-t_{R_2}}$
+      \end{itemize}   
+
+      Using the proof $\vec{\pi}_{13}$ we can update the proof elements:
+      \begin{itemize}
+      \item[$\pi'_{7,1} = $] $\pi_{7,1} \cdot d^{r'_{\Delta_3}} \cdot h^{-r'_{R_1}} \cdot h^{-r'_{R_2}} = \pi_{7,1} \cdot \pi_{13,1}^{-(\theta_1'+\theta_2')}$
+      \item[$\pi'_{7,2} = $] $\pi_{7,2} \cdot d^{s'_{\Delta_3}} \cdot h^{-s'_{R_1}} \cdot h^{-s'_{R_2}} = \pi_{7,2} \cdot \pi_{13,2}^{-(\theta_1'+\theta_2')}$
+      \item[$\pi'_{7,3} = $] $\pi_{7,3} \cdot d^{t'_{\Delta_3}} \cdot h^{-t'_{R_1}} \cdot h^{-t'_{R_2}} = \pi_{7,3} \cdot \pi_{13,3}^{-(\theta_1'+\theta_2')}$
+      \end{itemize}
+
+      
+      %8
+    \item Equation 8:
+
+      $e(C_1/\boxed{\Delta_1}, d) = e (\boxed{D_1},d) \cdot e(f^{-1}, \boxed{S_1})$
+
+      The Verification equation is: $ E(\iota(C_1)/\vec{C}_{\Delta_1}, \iota(d)) = E(\vec{C}_{D_1},\iota(d)) \cdot E(\iota(f^{-1}), \vec{C}_{S_1})\cdot E(\iota(\pi_{8,1}), \vec{g}_1)\cdot E(\iota(\pi_{8,2}), \vec{g}_2)\cdot E(\iota(\pi_{8,3}), \vec{g}_3)$
+
+      with
+      \begin{itemize}
+      \item[$\pi_{8,1} = $] $d^{-r_{\Delta_1}} \cdot d^{-r_{D_1}} \cdot f^{r_{S_1}}$
+      \item[$\pi_{8,2} = $] $d^{-s_{\Delta_1}} \cdot d^{-s_{D_1}} \cdot f^{s_{S_1}}$
+      \item[$\pi_{8,3} = $] $d^{-t_{\Delta_1}} \cdot d^{-t_{D_1}} \cdot f^{t_{S_1}}$
+      \end{itemize}
+      Using the proof $\vec{\pi}_{14}$ we can update the proof elements:
+      \begin{itemize}
+      \item[$\pi'_{8,1} = $] $\pi_{8,1} \cdot d^{-r'_{\Delta_1}} \cdot f^{r'_{S_1}} = \pi_{8,1} \cdot \pi_{14,1}^{-\theta_1'}$
+      \item[$\pi'_{8,2} = $] $\pi_{8,2} \cdot d^{-s'_{\Delta_1}} \cdot f^{s'_{S_1}} = \pi_{8,2} \cdot \pi_{14,2}^{-\theta_1'}$
+      \item[$\pi'_{8,3} = $] $\pi_{8,3} \cdot d^{-t'_{\Delta_1}} \cdot f^{t'_{S_1}} = \pi_{8,3} \cdot \pi_{14,3}^{-\theta_1'}$
+      \end{itemize}
+
+      %9
+    \item Equation 9:
+
+      $e(C_2/\boxed{\Delta_2}, d) = e (\boxed{D_2},d) \cdot e(g^{-1}, \boxed{S_2})$
+
+      The Verification equation is: $ E(\iota(C_2)/\vec{C}_{\Delta_2}, \iota(d)) = E(\vec{C}_{D_2},\iota(d)) \cdot E(\iota(g^{-1}), \vec{C}_{S_2})\cdot E(\iota(\pi_{9,1}), \vec{g}_1)\cdot E(\iota(\pi_{9,2}), \vec{g}_2)\cdot E(\iota(\pi_{9,3}), \vec{g}_3)$
+
+      with
+      \begin{itemize}
+      \item[$\pi_{9,1} = $] $d^{-r_{\Delta_2}} \cdot d^{-r_{D_2}} \cdot g^{r_{S_2}}$
+      \item[$\pi_{9,2} = $] $d^{-s_{\Delta_2}} \cdot d^{-s_{D_2}} \cdot g^{s_{S_2}}$
+      \item[$\pi_{9,3} = $] $d^{-t_{\Delta_2}} \cdot d^{-t_{D_2}} \cdot g^{t_{S_2}}$
+      \end{itemize}
+      Using the proof $\vec{\pi}_{15}$ we can update the proof elements:
+      
+      \begin{itemize}
+      \item[$\pi'_{9,1} = $] $\pi_{9,1} \cdot d^{-r'_{\Delta_2}} \cdot f^{-r'_{S_2}} = \pi_{9,1} \cdot \pi_{15,1}^{-\theta_2'}$
+      \item[$\pi'_{9,2} = $] $\pi_{9,2} \cdot d^{-s'_{\Delta_2}} \cdot f^{-s'_{S_2}} = \pi_{9,2} \cdot \pi_{15,2}^{-\theta_2'}$
+      \item[$\pi'_{9,3} = $] $\pi_{9,3} \cdot d^{-t'_{\Delta_2}} \cdot f^{-t'_{S_2}} = \pi_{9,3} \cdot \pi_{15,3}^{-\theta_2'}$
+      \end{itemize}
+
+      %10
+    \item Equation 10:
+
+      $e(C_3/\boxed{\Delta_3}, d) = e (\boxed{D_3},d) \cdot e(\boxed{S_1}, h^{-1})\cdot e(\boxed{S_2}, h^{-1})$
+
+      The Verification equation is: $ E(\iota(C_3/\vec{C}_{\Delta_3}), \iota(d)) = E(\vec{C}_{D_3},\iota(d)) \cdot E(\iota(h^{-1}), \vec{C}_{S_1}) \cdot E(\iota(h^{-1}), \vec{C}_{S_2}) \cdot E(\iota(\pi_{10,1}), \vec{g}_1)\cdot E(\iota(\pi_{10,2}), \vec{g}_2)\cdot E(\iota(\pi_{10,3}), \vec{g}_3)$
+
+      with
+      \begin{itemize}
+      \item[$\pi_{10,1} = $] $d^{-r_{\Delta_3}} \cdot d^{-r_{D_3}} \cdot h^{r_{S_1}} \cdot h^{r_{S_2}}$
+      \item[$\pi_{10,2} = $] $d^{-s_{\Delta_3}} \cdot d^{-s_{D_3}} \cdot h^{s_{S_1}} \cdot h^{s_{S_2}}$
+      \item[$\pi_{10,3} = $] $d^{-t_{\Delta_3}} \cdot d^{-t_{D_3}} \cdot h^{t_{S_1}} \cdot h^{t_{S_2}}$
+      \end{itemize}
+
+      Using the proof $\vec{\pi}_{13}$ we can update the proof elements:
+
+      \begin{itemize}
+      \item[$\pi'_{10,1} = $] $\pi_{10,1} \cdot d^{-r'_{\Delta_3}} \cdot h^{r'_{S_1}} \cdot h^{r'_{S_2}} = \pi_{10,1} \cdot \pi_{13,1}^{\theta_1'+\theta_2'}$
+      \item[$\pi'_{10,2} = $] $\pi_{10,1} \cdot d^{-s'_{\Delta_3}} \cdot h^{s'_{S_1}} \cdot h^{s'_{S_2}} = \pi_{10,2} \cdot \pi_{13,2}^{\theta_1'+\theta_2'}$
+      \item[$\pi'_{10,3} = $] $\pi_{10,1} \cdot d^{-t'_{\Delta_3}} \cdot h^{t'_{S_1}} \cdot h^{t'_{S_2}} = \pi_{10,3} \cdot \pi_{13,3}^{\theta_1'+\theta_2'}$
+      \end{itemize}
+      
+    \end{enumerate}
+
+    
+  \end{enumerate}
+
+  
+  
+\item[Second Stage]: Rerandomize the commitments and the proofs.
+
+  For each commitment $\vec{C}_{X}$ or $\vec{C}'_X$, we randomize it with $\tilde{vec{C}}_X = \vec{C}_X \cdot g_1^{r_X} \cdot g_2^{s_X} \cdot g_3^{t_X}$.
+  \begin{enumerate}
+
+    %1
+  \item The proof of the quadratic equation: $e(d,\boxed{d^b}) = e(\boxed{d^b},\boxed{d^b})$
+    
+    The Verification equation is: $E(\iota(d), \vec{C}_{d^b}) = E(\vec{C}_{d^b}, \vec{C}_{d^b}) \cdot E(\vec{\pi}_{1,1}, \vec{g}_1)\cdot E(\vec{\pi}_{1,2}, \vec{g}_2)\cdot E(\vec{\pi_{1,3}}, \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\vec{\pi}_{1,1} = $] $\iota(d^b)^{2r_{d^b}}\cdot (\vec{g}_1^{r_{d^b}} \cdot \vec{g}_2^{s_{d^b}} \cdot \vec{g}_3^{t_{d^b}})^{r_{d^b}} \cdot \iota(d^{-1})^{r_{d^b}}$
+    \item[$\vec{\pi}_{1,2} = $] $\iota(d^b)^{2s_{d^b}}\cdot (\vec{g}_1^{r_{d^b}} \cdot \vec{g}_2^{s_{d^b}} \cdot \vec{g}_3^{t_{d^b}})^{s_{d^b}} \cdot \iota(d^{-1})^{s_{d^b}}$
+    \item[$\vec{\pi}_{1,3} = $] $\iota(d^b)^{2t_{d^b}}\cdot (\vec{g}_1^{r_{d^b}} \cdot \vec{g}_2^{s_{d^b}} \cdot \vec{g}_3^{t_{d^b}})^{t_{d^b}} \cdot \iota(d^{-1})^{t_{d^b}}$
+    \end{itemize}
+
+    The new proofs of the new equations can be generated as:
+
+    \begin{itemize}
+    \item[$\tilde{\vec{\pi}}_{1,1} = $] $\vec{\pi}_{1,1} \cdot \vec{C}_{d^b}^{2\tilde{r}_{d^b}}\cdot (\vec{g}_1^{\tilde{r}_{d^b}} \cdot \vec{g}_2^{\tilde{s}_{d^b}} \cdot \vec{g}_3^{\tilde{t}_{d^b}})^{\tilde{r}_{d^b}} \cdot \iota(d^{-1})^{\tilde{r}_{d^b}}$
+    \item[$\tilde{\vec{\pi}}_{1,2} = $] $\vec{\pi}_{1,2} \cdot \vec{C}_{d^b}^{2\tilde{s}_{d^b}}\cdot (\vec{g}_1^{\tilde{r}_{d^b}} \cdot \vec{g}_2^{\tilde{s}_{d^b}} \cdot \vec{g}_3^{\tilde{t}_{d^b}})^{\tilde{s}_{d^b}} \cdot \iota(d^{-1})^{\tilde{s}_{d^b}}$
+    \item[$\tilde{\vec{\pi}}_{1,3} = $] $\vec{\pi}_{1,3} \cdot \vec{C}_{d^b}^{2\tilde{t}_{d^b}}\cdot (\vec{g}_1^{\tilde{r}_{d^b}} \cdot \vec{g}_2^{\tilde{s}_{d^b}} \cdot \vec{g}_3^{\tilde{t}_{d^b}})^{\tilde{t}_{d^b}} \cdot \iota(d^{-1})^{\tilde{t}_{d^b}}$
+    \end{itemize}
+
+
+
+    %2
+  \item Equation 2:
+
+    $e(\boxed{\Delta_1'},d) = e(C_1', \boxed{d^b})$:
+    
+    The Verification equation is:  $E(\vec{C}_{\Delta_1'}, \iota(d)) = E(\iota(C_1'), \vec{C}_{d^b}) \cdot E(\iota(\pi_{2,1}), \vec{g}_1)\cdot E(\iota(\pi_{2,2}), \vec{g}_2)\cdot E(\iota(\pi_{2,3}), \vec{g}_3)$
+    
+    with
+    \begin{itemize}
+    \item[$\pi_{2,1} = $] $d^{r_{\Delta_1'}} \cdot C_1'^{-r_{d^b}}$
+    \item[$\pi_{2,2} = $] $d^{s_{\Delta_1'}} \cdot C_1'^{-s_{d^b}}$
+    \item[$\pi_{2,3} = $] $d^{t_{\Delta_1'}} \cdot C_1'^{-t_{d^b}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    
+    \begin{itemize}
+    \item[$\tilde{\pi}_{2,1} = $] $\pi'_{2,1} \cdot d^{\tilde{r}_{\Delta_1'}}\cdot C_1'^{-\tilde{r}_{d^b}}$   
+    \item[$\tilde{\pi}_{2,2} = $] $\pi'_{2,2} \cdot d^{\tilde{s}_{\Delta_1'}}\cdot C_1'^{-\tilde{s}_{d^b}}$   
+    \item[$\tilde{\pi}_{2,3} = $] $\pi'_{2,3} \cdot d^{\tilde{t}_{\Delta_1'}}\cdot C_1'^{-\tilde{t}_{d^b}}$ 
+    \end{itemize}
+
+
+
+    %3
+  \item Equation 3:
+    
+    $e(\boxed{\Delta_2’},d) = e(C_2', \boxed{d^b})$:
+    
+    The Verification equation is:  $E(\vec{C}_{\Delta_2}’, \iota(d)) = E(\iota(C_2'), \vec{C}_{d^b}) \cdot E(\iota(\pi_{4,1}), \vec{g}_1)\cdot E(\iota(\pi_{4,2}), \vec{g}_2)\cdot E(\iota(\pi_{4,3}), \vec{g}_3)$
+    
+    with
+    \begin{itemize}
+    \item[$\pi_{3,1} = $] $d^{r_{\Delta_2’}} \cdot C_2'^{-r_{d^b}}$ 
+    \item[$\pi_{3,2} = $] $d^{s_{\Delta_2'}} \cdot C_2’^{-s_{d^b}}$ 
+    \item[$\pi_{3,3} = $] $d^{t_{\Delta_2’}} \cdot C_2'^{-t_{d^b}}$ 
+    \end{itemize}
+    
+    The new proofs of the equations are:
+    
+    \begin{itemize}
+    \item[$\tilde{\pi}_{3,1} = $] $\pi_{3,1}' \cdot d^{\tilde{r}_{\Delta_2'}} \cdot C_2'^{-\tilde{r}_{d^b}}$ 
+    \item[$\tilde{\pi}_{3,2} = $] $\pi_{3,2}' \cdot d^{\tilde{s}_{\Delta_2’}} \cdot C_2'^{-\tilde{s}_{d^b}}$    
+    \item[$\tilde{\pi}_{3,3} = $] $\pi_{3,2}' \cdot d^{\tilde{t}_{\Delta_2'}} \cdot C_2'^{-\tilde{t}_{d^b}}$ 
+    \end{itemize}
+
+    
+    %4
+  \item Equation 4:
+
+    $e(\boxed{\Delta_3’},d) = e(C_3', \boxed{d^b})$:
+    
+    The Verification equation is:  $E(\vec{C}_{\Delta_3’}, \iota(d)) = E(\iota(C_3'), \vec{C}_{d^b}) \cdot E(\iota(\pi_{5,1}), \vec{g}_1)\cdot E(\iota(\pi_{5,2}), \vec{g}_2)\cdot E(\iota(\pi_{5,3}), \vec{g}_3)$
+    
+    with
+    \begin{itemize}
+    \item[$\pi_{4,1} = $] $d^{r_{\Delta_3’}} \cdot C_3'^{-r_{d^b}}$
+    \item[$\pi_{4,2} = $] $d^{s_{\Delta_3'}} \cdot C_3'^{-s_{d^b}}$
+    \item[$\pi_{4,3} = $] $d^{t_{\Delta_3’}} \cdot C_3'^{-t_{d^b}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+
+    \begin{itemize}
+    \item[$\tilde{\pi}_{4,1} = $] $\pi_{4,1}' \cdot d^{\tilde{r}_{\Delta_3’}} \cdot C_3'^{-\tilde{r}_{d^b}}$
+    \item[$\tilde{\pi}_{4,2} = $] $\pi_{4,1}' \cdot d^{\tilde{s}_{\Delta_3'}} \cdot C_3’^{-\tilde{s}_{d^b}}$
+    \item[$\tilde{\pi}_{4,3} = $] $\pi_{4,1}' \cdot d^{\tilde{t}_{\Delta_3’}} \cdot C_3'^{-\tilde{t}_{d^b}}$
+    \end{itemize}
+
+    %5
+  \item $e(\boxed{\Delta_1},d) = e(f, \boxed{R_1})$:
+    
+    The Verification equation is:  $E(\vec{C}_{\Delta_1'}, \iota(d)) = E(\iota(f), \vec{C}_{R_1’}) \cdot E(\iota(\pi_{5,1}), \vec{g}_1)\cdot E(\iota(\pi_{5,2}), \vec{g}_2)\cdot E(\iota(\pi_{5,3}), \vec{g}_3)$
+    
+    with
+    \begin{itemize}
+    \item[$\pi_{5,1} = $] $d^{r_{\Delta_1'}} \cdot f^{-r_{R_1’}}$
+    \item[$\pi_{5,2} = $] $d^{s_{\Delta_1’}} \cdot f^{-s_{R_1'}}$
+    \item[$\pi_{5,3} = $] $d^{t_{\Delta_1'}} \cdot f^{-t_{R_1’}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{5,1} = $] $\pi_{5,1}' \cdot d^{\tilde{r}_{\Delta_1'}} \cdot f^{-\tilde{r}_{R_1’}}$
+    \item[$\tilde{\pi}_{5,2} = $] $\pi_{5,2}' \cdot d^{\tilde{s}_{\Delta_1’}} \cdot f^{-\tilde{s}_{R_1'}}$
+    \item[$\tilde{\pi}_{5,3} = $] $\pi_{5,3}' \cdot d^{\tilde{t}_{\Delta_1'}} \cdot f^{-\tilde{t}_{R_1’}}$
+    \end{itemize}
+
+    %6
+  \item $e(\boxed{\Delta_2'},d) = e(f, \boxed{R_2’})$:
+
+    The Verification equation is:  $E(\vec{C}_{\Delta_2'}, \iota(h)) = E(\iota(f), \vec{C}_{R_2'}) \cdot E(\iota(\pi_{6,1}), \vec{g}_1)\cdot E(\iota(\pi_{6,2}), \vec{g}_2)\cdot E(\iota(\pi_{6,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{6,1} = $] $d^{r_{\Delta_2'}} \cdot f^{-r_{R_2'}}$
+    \item[$\pi_{6,2} = $] $d^{s_{\Delta_2'}} \cdot f^{-s_{R_2'}}$
+    \item[$\pi_{6,3} = $] $d^{t_{\Delta_2'}} \cdot f^{-t_{R_2'}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{6,1} = $] $\pi_{6,1}' \cdot d^{\tilde{r}_{\Delta_2'}} \cdot f^{-\tilde{r}_{R_2'}}$
+    \item[$\tilde{\pi}_{6,2} = $] $\pi_{6,2}' \cdot d^{\tilde{s}_{\Delta_2'}} \cdot f^{-\tilde{s}_{R_2'}}$
+    \item[$\tilde{\pi}_{6,3} = $] $\pi_{6,3}' \cdot d^{\tilde{t}_{\Delta_2'}} \cdot f^{-\tilde{t}_{R_2'}}$
+    \end{itemize}
+
+    %7
+  \item $e(\boxed{\Delta_3'},d) \cdot e(\boxed{M}, d^{-1})= e(\boxed{R_1'}, h) \cdot e(\boxed{R_2'}, h)$:
+    
+    The Verification equation is:  $E(\vec{C}_{\Delta_3'}, \iota(d)) \cdot E(\vec{C}_M, \iota(d^{-1}))= E(\vec{C}_{R_1'}, \iota(h)) \cdot E(\vec{C}_{R_2'}, \iota(h)) \cdot E(\iota(\pi_{7,1}), \vec{g}_1)\cdot E(\iota(\pi_{7,2}), \vec{g}_2)\cdot E(\iota(\pi_{7,3}), \vec{g}_3)$
+    
+    with
+    \begin{itemize}
+    \item[$\pi_{7,1} = $] $d^{r_{\Delta_3'}} \cdot d^{-r_M} \cdot h^{-r_{R_1'}} \cdot h^{-r_{R_2'}}$
+    \item[$\pi_{7,2} = $] $d^{s_{\Delta_3'}} \cdot d^{-s_M} \cdot h^{-s_{R_1'}} \cdot h^{-s_{R_2'}}$
+    \item[$\pi_{7,3} = $] $d^{t_{\Delta_3'}} \cdot d^{-t_M} \cdot h^{-t_{R_1'}} \cdot h^{-t_{R_2'}}$
+    \end{itemize}   
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{7,1} = $] $\pi_{7,1}' \cdot d^{\tilde{r}_{\Delta_3'}} \cdot d^{-\tilde{r}_M} \cdot h^{-\tilde{r}_{R_1'}} \cdot h^{-\tilde{r}_{R_2'}}$
+    \item[$\tilde{\pi}_{7,2} = $] $\pi_{7,2}' \cdot d^{\tilde{s}_{\Delta_3'}} \cdot d^{-\tilde{s}_M} \cdot h^{-\tilde{s}_{R_1'}} \cdot h^{-\tilde{s}_{R_2'}}$
+    \item[$\tilde{\pi}_{7,3} = $] $\pi_{7,3}' \cdot d^{\tilde{t}_{\Delta_3'}} \cdot d^{-\tilde{t}_M} \cdot h^{-\tilde{t}_{R_1'}} \cdot h^{-\tilde{t}_{R_2'}}$
+    \end{itemize}
+
+    
+    %8
+  \item $e(C_1'/\boxed{\Delta_1'}, d) = e (\boxed{D_1},d) \cdot e(f^{-1}, \boxed{S_1'})$
+
+    The Verification equation is: $ E(\iota(C_1')/\vec{C}_{\Delta_1'}, \iota(d)) = E(\vec{C}_{D_1},\iota(d)) \cdot E(\iota(f^{-1}), \vec{C}_{S_1'})\cdot E(\iota(\pi_{8,1}), \vec{g}_1)\cdot E(\iota(\pi_{8,2}), \vec{g}_2)\cdot E(\iota(\pi_{8,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{8,1} = $] $d^{-r_{\Delta_1'}} \cdot d^{-r_{D_1}} \cdot f^{r_{S_1'}}$
+    \item[$\pi_{8,2} = $] $d^{-s_{\Delta_1'}} \cdot d^{-s_{D_1}} \cdot f^{s_{S_1'}}$
+    \item[$\pi_{8,3} = $] $d^{-t_{\Delta_1'}} \cdot d^{-t_{D_1}} \cdot f^{t_{S_1'}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    
+    \begin{itemize}
+    \item[$\tilde{\pi}_{8,1} = $] $\pi_{8,1}' \cdot d^{-\tilde{r}_{\Delta_1'}} \cdot d^{-\tilde{r}_{D_1}} \cdot f^{\tilde{r}_{S_1'}}$
+    \item[$\tilde{\pi}_{8,2} = $] $\pi_{8,2}' \cdot d^{-\tilde{s}_{\Delta_1'}} \cdot d^{-\tilde{s}_{D_1}} \cdot f^{\tilde{s}_{S_1'}}$
+    \item[$\tilde{\pi}_{8,3} = $] $\pi_{8,3}' \cdot d^{-\tilde{t}_{\Delta_1'}} \cdot d^{-\tilde{t}_{D_1}} \cdot f^{\tilde{t}_{S_1'}}$
+    \end{itemize}
+
+    
+    %9
+  \item $e(C_2'/\boxed{\Delta_2'}, d) = e (\boxed{D_2},d) \cdot e(g^{-1}, \boxed{S_2'})$
+
+    The Verification equation is: $ E(\iota(C_2')/\vec{C}_{\Delta_2'}, \iota(d)) = E(\vec{C}_{D_2},\iota(d)) \cdot E(\iota(g^{-1}), \vec{C}_{S_2'})\cdot E(\iota(\pi_{9,1}), \vec{g}_1)\cdot E(\iota(\pi_{9,2}), \vec{g}_2)\cdot E(\iota(\pi_{9,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{9,1} = $] $d^{-r_{\Delta_2'}} \cdot d^{-r_{D_2}} \cdot g^{r_{S_2'}}$
+    \item[$\pi_{9,2} = $] $d^{-s_{\Delta_2'}} \cdot d^{-s_{D_2}} \cdot g^{s_{S_2'}}$
+    \item[$\pi_{9,3} = $] $d^{-t_{\Delta_2'}} \cdot d^{-t_{D_2}} \cdot g^{t_{S_2'}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    
+    \begin{itemize}
+    \item[$\tilde{\pi}_{9,1} = $] $\pi_{9,1}' \cdot d^{-\tilde{r}_{\Delta_2'}} \cdot d^{-\tilde{r}_{D_2}} \cdot g^{-\tilde{r}_{S_2'}}$
+    \item[$\tilde{\pi}_{9,2} = $] $\pi_{9,2}' \cdot d^{-\tilde{s}_{\Delta_2'}} \cdot d^{-\tilde{s}_{D_2}} \cdot g^{-\tilde{s}_{S_2'}}$
+    \item[$\tilde{\pi}_{9,3} = $] $\pi_{9,3}' \cdot d^{-\tilde{t}_{\Delta_2'}} \cdot d^{-\tilde{t}_{D_2}} \cdot g^{-\tilde{t}_{S_2'}}$
+    \end{itemize}
+
+    %10
+  \item $e(C_3'/\boxed{\Delta_3'}, d) = e (\boxed{D_3},d) \cdot e(\boxed{S_1'}, h^{-1}) \cdot e(\boxed{S_2'}, h^{-1})$
+
+    The Verification equation is: $ E(\iota(C_3'/\vec{C}_{\Delta_3'}), \iota(d)) = E(\vec{C}_{D_3},\iota(d)) \cdot E(\iota(h^{-1}), \vec{C}_{S_1'}) \cdot E(\iota(h^{-1}), \vec{C}_{S_2'}) \cdot E(\iota(\pi_{10,1}), \vec{g}_1)\cdot E(\iota(\pi_{10,2}), \vec{g}_2)\cdot E(\iota(\pi_{10,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{10,1} = $] $d^{-r_{\Delta_3'}} \cdot d^{-r_{D_3}} \cdot h^{r_{S_1'}} \cdot h^{r_{S_2'}}$
+    \item[$\pi_{10,2} = $] $d^{-s_{\Delta_3'}} \cdot d^{-s_{D_3}} \cdot h^{s_{S_1'}} \cdot h^{s_{S_2'}}$
+    \item[$\pi_{10,3} = $] $d^{-t_{\Delta_3'}} \cdot d^{-t_{D_3}} \cdot h^{t_{S_1'}} \cdot h^{t_{S_2'}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+
+    \begin{itemize}
+    \item[$\tilde{\pi}_{10,1} = $] $\pi_{10,1}' \cdot d^{-\tilde{r}_{\Delta_3'}} \cdot d^{-\tilde{r}_{D_3}} \cdot h^{\tilde{r}_{S_1'}} \cdot h^{\tilde{r}_{S_2'}}$
+    \item[$\tilde{\pi}_{10,2} = $] $\pi_{10,1}' \cdot d^{-\tilde{s}_{\Delta_3'}} \cdot d^{-\tilde{s}_{D_3}} \cdot h^{\tilde{s}_{S_1'}} \cdot h^{\tilde{s}_{S_2'}}$
+    \item[$\tilde{\pi}_{10,3} = $] $\pi_{10,1}' \cdot d^{-\tilde{t}_{\Delta_3'}} \cdot d^{-\tilde{t}_{D_3}} \cdot h^{\tilde{t}_{S_1'}} \cdot h^{\tilde{t}_{S_2'}}$
+    \end{itemize}
+    
+    
+    %11
+  \item $e(\alpha, d/\boxed{d^b}) = e(g_z, \boxed{\Sigma_1}) \cdot e(g_r, \boxed{\Sigma_2}) \cdot \prod_{i=1}^3 e(g_i, \boxed{D_i})$
+
+    The Verification equation is: $E(\iota(a), \iota(h)/\vec{C}_{b}) = E(\iota(g_z), \vec{C}_{\Sigma_1}) \cdot E(\iota(g_r), \vec{C}_{\Sigma_2}) \cdot \prod_{i=1}^3 E(\iota(g_i)), \vec{C}_{D_i} \cdot E(\iota(\pi_{12,1}), \vec{g}_1)\cdot E(\iota(\pi_{12,2}), \vec{g}_2)\cdot E(\iota(\pi_{12,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{12,1} = $] $\alpha^{-r_{d^b}} \cdot g_z^{-r_{\Sigma_1}} \cdot g_r^{-r_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-r_{D_i}}$
+    \item[$\pi_{12,2} = $] $\alpha^{-s_{d^b}} \cdot g_z^{-s_{\Sigma_1}} \cdot g_r^{-s_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-s_{D_i}}$
+    \item[$\pi_{12,3} = $] $\alpha^{-t_{d^b}} \cdot g_z^{-t_{\Sigma_1}} \cdot g_r^{-t_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-t_{D_i}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{12,1} = $] $\pi_{12,1} \cdot \alpha^{-\tilde{r}_{d^b}} \cdot g_z^{-\tilde{r}_{\Sigma_1}} \cdot g_r^{-\tilde{r}_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-\tilde{r}_{D_i}}$
+    \item[$\tilde{\pi}_{12,2} = $] $\pi_{12,2} \cdot \alpha^{-\tilde{s}_{d^b}} \cdot g_z^{-\tilde{s}_{\Sigma_1}} \cdot g_r^{-\tilde{s}_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-\tilde{s}_{D_i}}$
+    \item[$\tilde{\pi}_{12,3} = $] $\pi_{12,3} \cdot \alpha^{-\tilde{t}_{d^b}} \cdot g_z^{-\tilde{t}_{\Sigma_1}} \cdot g_r^{-\tilde{t}_{\Sigma_2}} \cdot \prod_{i=1}^3 g_i^{-\tilde{t}_{D_i}}$
+    \end{itemize}
+
+    %12
+  \item $e(\beta, d/\boxed{d^b}) = e(h_z, \boxed{\Sigma_1}) \cdot e(h_u, \boxed{\Sigma_3}) \cdot \prod_{i=1}^3 e(h_i, \boxed{D_i})$
+
+    The Verification equation is: $E(\iota(b), \iota(h)/\vec{C}_{b}) = E(\iota(h_z), \vec{C}_{\Sigma_1}) \cdot E(\iota(h_u), \vec{C}_{\Sigma_3}) \cdot \prod_{i=1}^3 E(\iota(h_i)), \vec{C}_{D_i} \cdot E(\iota(\pi_{13,1}), \vec{g}_1)\cdot E(\iota(\pi_{13,2}), \vec{g}_2)\cdot E(\iota(\pi_{13,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{13,1} = $] $\beta^{-r_{d^b}} \cdot h_z^{-r_{\Sigma_1}} \cdot h_u^{-r_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-r_{D_i}}$
+    \item[$\pi_{13,2} = $] $\beta^{-s_{d^b}} \cdot h_z^{-s_{\Sigma_1}} \cdot h_u^{-s_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-s_{D_i}}$
+    \item[$\pi_{13,3} = $] $\beta^{-t_{d^b}} \cdot h_z^{-t_{\Sigma_1}} \cdot h_u^{-t_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-t_{D_i}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{13,1} = $] $\pi_{13,1} \cdot \beta^{-\tilde{r}_{d^b}} \cdot h_z^{-\tilde{r}_{\Sigma_1}} \cdot h_u^{-\tilde{r}_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-\tilde{r}_{D_i}}$
+    \item[$\tilde{\pi}_{13,2} = $] $\pi_{13,1} \cdot \beta^{-\tilde{s}_{d^b}} \cdot h_z^{-\tilde{s}_{\Sigma_1}} \cdot h_u^{-\tilde{s}_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-\tilde{s}_{D_i}}$
+    \item[$\tilde{\pi}_{13,3} = $] $\pi_{13,1} \cdot \beta^{-\tilde{t}_{d^b}} \cdot h_z^{-\tilde{t}_{\Sigma_1}} \cdot h_u^{-\tilde{t}_{\Sigma_3}} \cdot \prod_{i=1}^3 h_i^{-\tilde{t}_{D_i}}$
+    \end{itemize}
+
+    %13
+  \item \label{relationhd}
+    $e(\boxed{d^b},h) = e(\boxed{h^b}, d)$: 
+
+    The Verification equation is: $E(\vec{C}_b, \iota(h)) = E(\vec{C}_{h^b}, d) \cdot E(\iota(\pi_{13,1}), \vec{g}_1)\cdot E(\iota(\pi_{13,2}), \vec{g}_2)\cdot E(\iota(\pi_{13,3}), \vec{g}_3)$
+
+    with
+    \begin{itemize}
+    \item[$\pi_{13,1} = $] $h^{r_{d^b}} \cdot d^{-r_{h^b}}$
+    \item[$\pi_{13,2} = $] $h^{s_{d^b}} \cdot d^{-s_{h^b}}$
+    \item[$\pi_{13,3} = $] $h^{t_{d^b}} \cdot d^{-t_{h^b}}$
+    \end{itemize}
+
+    We can rerandomize this proof using the following formulas:
+
+    \begin{itemize}
+    \item[$\tilde{\pi}_{13,1} = $] $h^{r_{d^b}+\tilde{r}_{d^b}} \cdot d^{r_{h^b}+\tilde{r}_{h^b}} = \pi_{13,1} \cdot h^{\tilde{r}_{d^b}} \cdot d^{\tilde{r}_{h^b}}$
+    \item[$\tilde{\pi}_{13,2} = $] $h^{s_{d^b}+\tilde{s}_{d^b}} \cdot d^{s_{h^b}+\tilde{s}_{h^b}} = \pi_{13,2} \cdot h^{\tilde{s}_{d^b}} \cdot d^{\tilde{s}_{h^b}}$
+    \item[$\tilde{\pi}_{13,3} = $] $h^{t_{d^b}+\tilde{t}_{d^b}} \cdot d^{t_{h^b}+\tilde{t}_{h^b}} = \pi_{13,3} \cdot h^{\tilde{t}_{d^b}} \cdot d^{\tilde{t}_{h^b}}$
+    \end{itemize}
+
+
+    %14  
+  \item \label{relationfd}
+    $e(\boxed{F},d) = e(f, \boxed{d^b})$
+
+    The Verification equation is: $E(\vec{C}_F, \iota(d)) = E(\iota(f), \vec{C}_{d^b}) \cdot E(\iota(\pi_{14,1}), \vec{g}_1)\cdot E(\iota(\pi_{14,2}), \vec{g}_2)\cdot E(\iota(\pi_{14,3}), \vec{g}_3)$
+
+    with
+
+    \begin{itemize}
+    \item[$\pi_{14,1} = $] $d^{r_F} \cdot f^{-r_{d^b}}$    
+    \item[$\pi_{14,2} = $] $d^{s_F} \cdot f^{-s_{d^b}}$    
+    \item[$\pi_{14,3} = $] $d^{t_F} \cdot f^{-t_{d^b}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    \begin{itemize}
+    \item[$\tilde{\pi}_{14,1} = $] $\tilde{\pi}_{14,1} \cdot d^{\tilde{r}_F} \cdot f^{-\tilde{r}_{d^b}}$    
+    \item[$\tilde{\pi}_{14,2} = $] $\tilde{\pi}_{14,2} \cdot d^{\tilde{s}_F} \cdot f^{-\tilde{s}_{d^b}}$    
+    \item[$\tilde{\pi}_{14,3} = $] $\tilde{\pi}_{14,3} \cdot d^{\tilde{t}_F} \cdot f^{-\tilde{t}_{d^b}}$
+    \end{itemize}
+
+
+    %15
+  \item \label{relationgd}
+    $e(\boxed{G},d) = e(g, \boxed{d^b})$
+
+    The Verification equation is: $E(\vec{C}_G, \iota(d)) = E(\iota(g), \vec{C}_{d^b}) \cdot E(\iota(\pi_{15,1}), \vec{g}_1)\cdot E(\iota(\pi_{15,2}), \vec{g}_2)\cdot E(\iota(\pi_{15,3}), \vec{g}_3)$
+
+    with
+
+    \begin{itemize}
+    \item[$\pi_{15,1} = $] $d^{r_G} \cdot g^{-r_{d^b}}$    
+    \item[$\pi_{15,1} = $] $d^{s_G} \cdot g^{-s_{d^b}}$    
+    \item[$\pi_{15,1} = $] $d^{t_G} \cdot g^{-t_{d^b}}$
+    \end{itemize}
+
+    The new proofs of the equations are:
+    
+    \begin{itemize}
+    \item[$\tilde{\pi}_{15,1} = $] $\pi_{15,1} \cdot d^{\tilde{r}_G} \cdot g^{-\tilde{r}_{d^b}}$    
+    \item[$\tilde{\pi}_{15,1} = $] $\pi_{15,1} \cdot d^{\tilde{s}_G} \cdot g^{-\tilde{s}_{d^b}}$    
+    \item[$\tilde{\pi}_{15,1} = $] $\pi_{15,1} \cdot d^{\tilde{t}_G} \cdot g^{-\tilde{t}_{d^b}}$
+    \end{itemize}
+
+    
+  \end{enumerate}
+\end{description}
+
+\subsection{Efficiency}
+From the efficiency point of view, there are in total 108 group elements.
+
+For the efficientcy reason, we can replace
+\begin{itemize}
+\item $(\vec{\pi}_3,\vec{\pi}_9)$ by $(\vec{\pi}_3 \cdot \vec{\pi}_9)$
+\item $(\vec{\pi}_4,\vec{\pi}_{10})$ by $(\vec{\pi}_4 \cdot\vec{\pi}_{10})$
+\item $(\vec{\pi}_5,\vec{\pi}_{11})$ by $(\vec{\pi}_5 \cdot\vec{\pi}_{11})$
+\item $(\vec{\pi}_6,\vec{\pi}_{12})$ by $(\vec{\pi}_6 \cdot\vec{\pi}_{12})$
+\item $(\vec{\pi}_7,\vec{\pi}_{13})$ by $(\vec{\pi}_7 \cdot\vec{\pi}_{13})$
+\end{itemize}
+
+Thus we can reduce the number of group elements down to $108-5 \cdot 3 = 93$.
+
+\input{newrerand}
