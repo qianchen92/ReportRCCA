@@ -167,7 +167,7 @@ Then we present the security model and proprieties we want achieve we also give 
 
   \begin{myDef}{Chosen-Message Target Collision Resistance} This property of a Trapdoor Commitment scheme $TC$ is defined by the winning probability of the adversary against the following security game:
     \begin{description}
-    \item[Init phase:] The challenger generate the public parmeters $\PPP_{TC} \gets TC.\Setup$.
+    \item[Init phase:] The challenger generate the public parameters $\PPP_{TC} \gets TC.\Setup$.
     \item[Query phase:] The adversary has oracle access of the commitment algorithm $\Com$. For each query of message $m$, the challenger compute $(\com, \open) \gets TC.\Com(m)$. Record them in the hash table $Q$. and outputs $(\com, \open)$ to the adversary.
     \item[Challenge phase:] The adversary outputs message-commitment triple $(m^*, \com^*, \open^*)$.
     \end{description}
