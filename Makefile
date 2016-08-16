@@ -5,4 +5,4 @@ default:
 	pdflatex main.tex
 	evince main.pdf&
 clean :
-	rm -rf *.loc *.dvi *.ps *.aux *.log *.toc *.out *~
+	rm -rf *.loc *.dvi *.ps *.aux *.log *.toc *.out *~ *.bbl *.blg *.pdf

@@ -1,5 +1,5 @@
 In this section, we briefly present some standard computation assumptions, we will use in this report.  
-Then we present the security model and proprieties we want achieve we also give some building blocks.
+Then we give some building blocks and present the security model and proprieties we want to achieve.
 
 \begin{subsection}{Assumptions}
 
@@ -8,7 +8,7 @@ Then we present the security model and proprieties we want achieve we also give 
   In cryptography, one of the most studied assumption is Diffie-Hellman assumption. In this work, we consider a slightly stronger variant of DDH assumption Symmetric external Diffie-Hellman(SXDH).
 
   \begin{myDef}{Decisional Diffie-Hellman(DDH)}
-    For a security parameter $\lambda$, we say a group $\G$ of prime order $p>2^{\lambda}$ verifies the Diffie-Hellman assumption, if given a group generator $g \in \G$ and two triples of group elements $(g^a, g^b, g^{ab})$ and $(g^a, g^b, g^c)$ in which $(a, b, c)$ are random values generated randomly $(a, b, c) \gets \mathbb{Z}_p^3$, we define the advantage of an adversary $\Adv$ against the DDH problem by:
+    For a security parameter $\lambda$, we say a group $\G$ of prime order $p>2^{\lambda}$ verifies the Diffie-Hellman assumption, if given a group generator $g \in \G$ and two triples of group elements $(g^a, g^b, g^{ab})$ and $(g^a, g^b, g^c)$ in which $(a, b, c)$ are three values randomly generated  $(a, b, c) \gets \mathbb{Z}_p^3$, we define the advantage of an adversary $\Adv$ against the DDH problem by:
 
     \begin{align*}
       adv(\Adv) = |\PR(\Adv(g, g^a, g^b, g^{ab}) = 1) = \PR(\Adv(g, g^a, g^b, g^c) = 1)| < \varepsilon(\lambda).
@@ -24,7 +24,7 @@ Then we present the security model and proprieties we want achieve we also give 
   We also introduce Double Pairing assumption which can be applied by the SXDH assumption
   
   \begin{myDef}{Double Pairing(DP)}
-    Given a asymmetric pairing setting $(\G, \hat{G}, \G_T, e:\G \times \hat{\G} \to \G_T)$. Given two random non-zero generators $(g_z, g_r) \in \G$,
+    Given a asymmetric pairing setting $(\G, \hat{\G}, \G_T, e:\G \times \hat{\G} \to \G_T)$. Given two random non-zero generators $(g_z, g_r) \in \G$,
     \begin{align*}
       \PR[(z, r) \gets \Adv| (z, r)\in \hat{\G}^2 \wedge e(g_z, z) \cdot e(g_r, r) = 1] \in negl(\lambda)
     \end{align*}
@@ -91,8 +91,8 @@ Then we present the security model and proprieties we want achieve we also give 
 
   \begin{myDef} A LHSPS for the message vectors of size $k$ is strongly unforgeable if no PPT(probabilistic polynomial Turing machine) adversary has non-negligible advantage in the following game:
     \begin{description}
-    \item[Init phase: ]The challenger use $\Setup$ and $\KeyGen$ to generate the public parameters $\PPP$, verification key $\VK$ and signing key$\SK$. Then send $\PPP$ and $\VK$ to the challenger.
-    \item[Signing queries: ] The adversary has access of a signing oracle, he can require a polynomial number of messages $\{\vec{M}_i\}_{i = 1}^q$ to sign. 
+    \item[Init phase: ]The challenger uses $\Setup$ and $\KeyGen$ to generate the public parameters $\PPP$, verification key $\VK$ and signing key $\SK$. Then send $\PPP$ and $\VK$ to the challenger.
+    \item[Signing queries: ] The adversary has access of a signing oracle, he can require a polynomial number of messages $\{\vec{M}_i\}_{i = 1}^q$ to be signed by the signing oracle. 
     \item[Challenge phase: ] The adversary outputs a message and signature pair $(\vec{M}^*, \sigma^*)$.
     \end{description}
 
@@ -102,10 +102,10 @@ Then we present the security model and proprieties we want achieve we also give 
 
   \end{myDef}
 
-  The following theorem is proved in~\cite{DBLP:journals/dcc/LibertPJY15}.
+  The following theorem has been proven in~\cite{DBLP:journals/dcc/LibertPJY15}.
   
   \begin{myTh}
-    The previous constructed LHSPS is strongly unforgeable.
+    The previous constructed LHSPS is strongly unforgeable under Double Pairing assumption.
   \end{myTh}
   
   %  The security of the One-Time Linearly Homomorphic Structure Preserving Signature is defined by the following games
@@ -167,7 +167,7 @@ Then we present the security model and proprieties we want achieve we also give 
 
   \begin{myDef}{Chosen-Message Target Collision Resistance} This property of a Trapdoor Commitment scheme $TC$ is defined by the winning probability of the adversary against the following security game:
     \begin{description}
-    \item[Init phase:] The challenger generate the public parameters $\PPP_{TC} \gets TC.\Setup$.
+    \item[Init phase:] The challenger generates the public parameters $\PPP_{TC} \gets TC.\Setup$.
     \item[Query phase:] The adversary has oracle access of the commitment algorithm $\Com$. For each query of message $m$, the challenger compute $(\com, \open) \gets TC.\Com(m)$. Record them in the hash table $Q$. and outputs $(\com, \open)$ to the adversary.
     \item[Challenge phase:] The adversary outputs message-commitment triple $(m^*, \com^*, \open^*)$.
     \end{description}
@@ -177,10 +177,10 @@ Then we present the security model and proprieties we want achieve we also give 
     \end{align*}
   \end{myDef}
 
-  The following theorem is proved in~\cite{DBLP:conf/eurocrypt/AbeKOT15}.
+  The following theorem has been proven in~\cite{DBLP:conf/eurocrypt/AbeKOT15}.
 
   \begin{myTh}
-    The previous Trapdoor Commitment scheme is Chosen-Massage Target Collision Resistant.
+    The previous Trapdoor Commitment scheme is Chosen-Massage Target Collision Resistant under Double Pairing assumption.
   \end{myTh}
 
   
@@ -191,17 +191,17 @@ Then we present the security model and proprieties we want achieve we also give 
 \begin{subsection}{Security Notions}
 
   
-  An public key encryption scheme is a quadruple of algorithms $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec)$.
+  A public key encryption scheme is a quadruple of algorithms $\mathcal{E} = (\Setup, \KeyGen, \Enc, \Dec)$.
 
   \begin{myDef}{CCA-2}
-  The CCA-2 security of the public key encryption is defined by the wining probability of the adversary in the following game:
+  The CCA-2 security of the public key encryption is defined by the winning probability of the adversary in the following game:
   \begin{description}
   \item[Init phase]:
     We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
-  \item[Quary phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
-  \item[Challenge phase]: The adversary choose two message $(m_0, m_1)$, then submits them to the challenger. The challenger choose randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and return the result ciphertext $c_b$ to the adversary.
+  \item[Quary phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertexts by the decryption oracle.
+  \item[Challenge phase]: The adversary chooses two message $(m_0, m_1)$, then submits them to the challenger. The challenger chooses randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and returns the result ciphertext $c_b$ to the adversary.
   \item[Quary phase 2]: The adversary has the oracle access to the decryption oracle expect that he can not require the oracle to decrypt the ciphertext $c_b$.
-  \item[Gussing phase]: The adversary output a bit $b'$.
+  \item[Guessing phase]: The adversary outputs a bit $b'$.
   \end{description}
 
   The encryption scheme $\mathcal{E}$ is CCA-2 secure iff $adv(\Adv) = |\PR(b = b') - \frac{1}{2}| < negl(\lambda)$ where $negl(\lambda)$ is a negligible function \wrt $\lambda$.
@@ -209,30 +209,30 @@ Then we present the security model and proprieties we want achieve we also give 
 
   We also define the Replayable-CCA encryption scheme(RCCA)
   \begin{myDef}{RCCA}
-    The RCCA security of the public key encryption is defined by the wining probability of the adversary in the following game:
+    The RCCA security of the public key encryption is defined by the winning probability of the adversary in the following game:
     \begin{description}
     \item[Init phase]:
       We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
-    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
-    \item[Challenge phase]: The adversary choose two message $(m_0, m_1)$, then submits them to the challenger. The challenger choose randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and return the result ciphertext $c_b$ to the adversary.
+    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertexts by the decryption oracle.
+    \item[Challenge phase]: The adversary chooses two message $(m_0, m_1)$, then submits them to the challenger. The challenger chooses randomly a bit $b \in \{0,1\}$, then encrypts the message $m_b$ using the public encryption key $\pk$ and returns the result ciphertext $c_b$ to the adversary.
     \item[Query phase 2]: The adversary has the oracle access to the decryption oracle expect that when the oracle receive a ciphertext, if the result of the decryption is equal to $m_0$ or $m_1$, then the oracle returns $Replay$.
-    \item[Guessing phase]: The adversary output a bit $b'$.
+    \item[Guessing phase]: The adversary outputs a bit $b'$.
   \end{description}
 
-  The encryption scheme $\mathcal{E}$ is CCA-2 secure iff $adv(\Adv) = |\PR(b = b') - \frac{1}{2}| < negl(\lambda)$ where $negl(\lambda)$ is a negligible function \wrt $\lambda$.
+  The encryption scheme $\mathcal{E}$ is RCCA secure iff $adv(\Adv) = |\PR(b = b') - \frac{1}{2}| < negl(\lambda)$ where $negl(\lambda)$ is a negligible function \wrt $\lambda$.
   \end{myDef}
 
   We also define the unlinkability of the RCCA encryption scheme which is first proposed by Prabhakaran \etal~\cite{DBLP:conf/crypto/PrabhakaranR07}.
   \begin{myDef}{Unlinkability}
     Let RCCA encryption be the following four algorithm $(\Setup, \KeyGen, \Enc, \Dec, \Rerand)$
-    The unlinkability of RCCA encrypton scheme is defined by the wining probability of the adversary in the following game:
+    The unlinkability of RCCA encryption scheme is defined by the wining probability of the adversary in the following game:
     \begin{description}
     \item[Init phase]:
       We generate the public parameter \wrt the secure parameter $\lambda$. The Challenger use $\KeyGen$ algorithm to generate a pair of public key $\pk$ and secrect key $\sk$, then give the public key to the adversary.
-    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
-    \item[Challenge phase]: The adversary choose outputs a ciphertext $C$, then submits it to the challenger. If $\Dec(C)\neq \bot$, the challenger choose randomly a bit $b \in \{0,1\}$, Then if $b = 0$, the challenger outputs $\Enc(\Dec(C))$, otherwise he outputs $\Rerand(C)$.
-    \item[Query phase 2]: The adversary has again the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertext by the decryption oracle.
-    \item[Guessing phase]: The adversary output a bit $b'$.
+    \item[Query phase 1]: The adversary has the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertexts by the decryption oracle.
+    \item[Challenge phase]: The adversary chooses a ciphertext $C$, then submits it to the challenger. If $\Dec(C)\neq \bot$, the challenger chooses randomly a bit $b \in \{0,1\}$, Then if $b = 0$, the challenger outputs $\Enc(\Dec(C))$, otherwise he outputs $\Rerand(C)$.
+    \item[Query phase 2]: The adversary has again the oracle access to the decryption oracle, he can decrypt polynomialy many ciphertexts by the decryption oracle.
+    \item[Guessing phase]: The adversary outputs a bit $b'$.
     \end{description}
 
     The RCCA scheme is computational(\resp statistical) unlinkable if all PPT(\resp omnipotent) adversary has negligible advantage against the previous game. 

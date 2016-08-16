@@ -1,10 +1,12 @@
 This algorithm takes as input the public key and the ciphertext $C = (C_1, C_2, C_3)$, then outputs a re-randomized new ciphertext $C' = (C_1', C_2', C_3')$ and the new ciphertext is unlinkable to the original one.
 
-In this algorithm, for the variable $X$, we denote its commitment by $\vec{C}_X = (1, 1, X) \cdot \vec{g}_1^{r_X} \cdot \vec{g}_2^{s_X} \cdot \vec{g}_3^{t_X}$ its new commitment from the first stage by $\vec{C}_X' = \vec{C}_X \cdot \vec{g}_1^{r'_X} \cdot \vec{g}_2^{s'_X} \cdot \vec{g}_3^{t'_X}$ and denote the new randomness introduced in the second step by $(\tilde{r}_X, \tilde{s}_X, \tilde{t}_X)$.
-
 For the randomization, we will proceed in two stages. Firstly we sample two random values $(\theta_1', \theta_2') \gets \mathbb{Z}_p$. The new variables are $C_1' = C_1 \cdot f^{\theta_1'}$, $C_2' = C_2 \cdot g^{\theta_2'}$ and $C_3' = C_3 \cdot h^{\theta_1'+\theta_2'}$. Then using the proof of the equations $(13, 14, 15)$, to update the new proofs corresponding the new ciphertext $\vec{C}' = (C_1', C_2', C_3')$.
+
 %  For the randomization we first generate randomness for each commitment. For a variable $X$, we generate the new randomness $(\tilde{r}_X, \tilde{s}_X, \tilde{t}_X)$, the new commitment will be $\tilde{\vec{C}}_X = \iota(X) \cdot \vec{g}_1^{r_X+\tilde{r}_X} \cdot \vec{g}_2^{s_X+\tilde{s}_X} \cdot \vec{g}_3^{t_X+\tilde{t}_X}$.
 
 For the second stage, we randomize all the commitments and the GS proofs without changing the ciphertext part $\vec{C}' = (C_1', C_2', C_3')$.
+
+In this algorithm, for the variable $X$, we denote its commitment by $\vec{C}_X = (1, 1, X) \cdot \vec{g}_1^{r_X} \cdot \vec{g}_2^{s_X} \cdot \vec{g}_3^{t_X}$ its new commitment from the first stage by $\vec{C}_X' = \vec{C}_X \cdot \vec{g}_1^{r'_X} \cdot \vec{g}_2^{s'_X} \cdot \vec{g}_3^{t'_X}$ and denote the new randomness introduced in the second step by $(\tilde{r}_X, \tilde{s}_X, \tilde{t}_X)$.
+
 
 The detailed proof elements are in the appendix~\ref{Rerandomization}. With this instantiation, the ciphertext of the RCCA encryption scheme has $93$ group elements.

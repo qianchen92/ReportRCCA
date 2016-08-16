@@ -3,8 +3,8 @@
 For the simple needs of communicate safely and privately, cryptography is very important in our current life. 
 Start with Shanon in 1949 in his paper Communication theory of secrecy systems~\cite{shannon-otp},
 we begin to formally define the properties we wanted for the cryptographic protocols and prove these properties based on some hardness assumptions or complexity assumptions.
-As one of most useful cryptographic protocol, the encryption scheme is widely used in the construction or more complex cryptographic system.
-Thus we are motivated to define the most adapted security notion for the encryption scheme. 
+As one of most useful cryptographic protocol, the encryption scheme is widely used in the construction of more complex cryptographic system.
+Thus we are motivated to define the most adapted security notion for different encryption schemes. 
 From the very basic One-Wayness Chosen-Plaintext Attack(OW-CPA) to the most secure Indistinguishable Chosen-Ciphertext Attack(IND-CCA) model. 
 
 One of the most important property of the encryption scheme is the malleability, 
@@ -14,19 +14,17 @@ thus it is forbidden by the most secure definition(IND-CCA).
 But recently, these properties are seen to be a potentially useful feature that can be exploited.
 
 \subsection*{Problem studied}
-My internship focused on the encryption scheme which only allowed to be rerandomizable.
+My internship focused on the encryption scheme which is only allowed to be rerandomizable.
 This property can be formally defined as resistant to Replayable Chosen-Ciphertext Attack(RCCA).
-Some work on construct more complex cryptographic system like mix network proposed by Golle~\etal~\cite{DBLP:conf/ctrsa/GolleJJS04}
-RCCA encryption scheme are required in such schemes.
+Some works on construct more complex cryptographic system like mix network proposed by Golle~\etal~\cite{DBLP:conf/ctrsa/GolleJJS04} needs RCCA encryption scheme.
 However, the previous constructions~\cite{DBLP:conf/ctrsa/GolleJJS04} are suffered from the Chosen-Chipertext attack or based on some non standard assumptions~\cite{DBLP:conf/crypto/PrabhakaranR07} or not very efficient~\cite{DBLP:conf/eurocrypt/ChaseKLM12}.
-The aim of my internship is to construct and prove efficient encryption scheme which are suitable for the above schemes.
-The one of the main motivation is that the previous works on constructing such scheme are more or less not efficient.
-We try to improve there efficiency to get some usable protocol based on the standard assumptions in the practical point of view.
+The aim of my internship is to construct and prove with standard and well studied assumptions efficient encryption scheme which verifies the RCCA security.
+We try to improve the efficiency to get some usable protocol in the practical point of view.
 
 \subsection*{Proposed Contributions}
 The contributions of my internship are the following:
 We first give an efficient instantiation of the general controlled-malleable encryption scheme proposed by~\cite{DBLP:conf/eurocrypt/ChaseKLM12} which ciphertext has $93\G$ elements.
-Then we use another approach to get a very efficient computational RCCA encryption in which the the ciphertext size is only $39\G + 20 \hat{\G}$ elements.
+Then we use another approach to get a efficient computational RCCA encryption in which the the ciphertext size is only $39\G + 20 \hat{\G}$ elements.
 As a sub-result, we also have constructed a public verifiable structure-preserving CCA encryption which is more efficient than the existing construction $16\G + 11\hat{\G}$ against $321\G$~\cite{DBLP:conf/pkc/AbeDKNO13}.
 
 \subsection*{Arguments Supporting Their Validity}

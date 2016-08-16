@@ -1,4 +1,4 @@
-In this section, we use the previous trapdoor commitment scheme to commit the verification key, as they are constructed to verify so called CMTCR (Chosen-Message Target Collision Resistant) property, this will leads us to a wanted CCA-2 encryption scheme.
+In this section, we use the all-but-one hash proof technic proposed by~\cite{DBLP:conf/tcc/LibertY12}. We combine it with the previous trapdoor commitment scheme and a strongly unforgeable signature scheme,using the property CMTCR (Chosen-Message Target Collision Resistant) of the trapdoor commitment scheme, we can construct a wanted CCA-2 structure preserving publicly verifiable encryption scheme.
 \begin{description}
 
 \item[\boldmath{$SPCCA.\KeyGen(1^\lambda)$}]:
