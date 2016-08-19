@@ -1,0 +1,52 @@
+\begin{description}
+\item[\boldmath{$SPC.\Setup(1^{\lambda},\ell)$}]: Generate the public parameters for the trapdoor commitment scheme for security parameter $\lambda$ and message vector length $\ell$. 
+  \begin{enumerate}
+  \item Choose a random prime $p< 2^{\lambda}$.
+  \item Generate a asymmetric pairing groups $(\G, \hat{\G}, \G_T)$ of prime order $p$ and a pairing function $e : \G \times \hat{\G} \to \G_T$.
+  \item Generate the group generators $(g, \hat{g}) \in \G \times \hat{\G}$.	
+  \item $\PPP = (p, \G, \hat{\G}, \G_T, e, g, \hat{g},\ell)$.
+  \end{enumerate}
+
+\item[\boldmath{$SPC.\KeyGen(\PPP)$}]:
+  \begin{enumerate}
+  \item For $i = 1, \dots, \ell+2$, generate random values $\rho_i \sample \mathbb{Z}_p^*$, then compute $\hat{X}_i \gets \hat{g}^{\rho_i}$.
+  \item Set $\ck \gets \{\hat{X}_i\}_{i = 1}^{\ell+2}$ and $tk \gets \{\rho_i\}_i^{\ell+2}$.
+  \end{enumerate}
+
+
+\item[\boldmath{$SPC.\Com(\PPP, \ck, \vec{M})$}]: where $\vec{\hat{M}} = (\hat{M}_1, \dots, \hat{M}_\ell) \in \hat{\G}^\ell$.
+  \begin{enumerate}
+  \item Choose a random value $w_z \in \mathbb{Z}_p^*$ then compute $g_z = g^{w_z}$.
+  \item For $i = 1, \dots, \ell$, generate random values $\chi_i \sample \mathbb{Z}_p$ and compute $g_i = g^{\chi_i}$.
+  \item Set $\vk_{pots} \gets (g_z, g_1, \dots, g_\ell) \in \G^{\ell+1}$ and $\sk_{pots} \gets (w_z,\chi_1, \dots, \chi_\ell)$.
+  \item Choose randomly $a \sample \mathbb{Z}_p$, then set $\ovk_{pots} =A = g^{a}$ and $\osk_{pots} = a$.
+  \item Using the signing key $\sk_{pots}$ to generate signatures of the message $\vec{\hat{M}}$ \wrt to the one-time signature's secret key $\osk_{pots}$:
+    \begin{enumerate}
+    \item Generate random value $\zeta_1 \in \mathbb{Z}_p$
+    \item Compute the signature $(\hat{Z}, \hat{R}) \in \hat{\G}^2$ for $\vec{\hat{M}}$:
+      \begin{align*}
+	\hat{Z} &= \hat{g}^{\zeta_1} & \hat{R} = \hat{g}^{a-\zeta_1 w_z}\prod_{i=1}^{\ell} \hat{M}_i^{\chi_i} 
+      \end{align*}
+    \end{enumerate}
+  \item We use the commitment key to generate the commitment for the message.
+    \begin{enumerate}
+    \item Set $(m_1, \dots, m_{\ell+2}) \gets (\chi_1, \dots, \chi_\ell, w_z, a)$ 
+    \item Parse $\vec{\ck}$ as $(\hat{X}_1, \dots, \hat{X}_{\ell+2})$.
+    \item Generate a random value $\zeta_2 \gets \mathbb{Z}_p^*$ and compute:
+      \begin{align*}
+	\hat{C} &= \hat{g}^{\zeta_2}\prod_{i = 1}^{\ell+2}\hat{X}_i^{m_i} & D &= g^{\zeta_2}
+      \end{align*}
+    \end{enumerate}
+  \item We set the commitment as $\com  = \hat{C}$ and $\open = (D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R}) \in \G^{\ell+3} \times \hat{\G}^{2}$.
+  \end{enumerate}
+  
+\item[\boldmath{$SPC.\Verif(\ck, \com, \vec{\hat{M}}, \open)$}] :
+  \begin{enumerate}
+  \item Parse $\vec{\hat{M}}$ with $(\hat{M}_1, \dots, \hat{M}_\ell)$ and $\open$ with $(D, g_z, g_1, \dots, g_\ell, \ovk_{pots} = g^a, \hat{Z}, \hat{R})$.
+  \item Set $\vec{N} = (N_1, \dots, N_{\ell+2}) = (g_1, \dots, g_\ell, g_z, \ovk_{pots})$
+  \item Using $\ovk_{pots} = A \in \G$, verify the following equations:
+    \begin{align*}
+      e(g, \hat{C}) &= e(D, \hat{g}) \prod_{i = 1}^{\ell+2} e(N_i, \hat{X}_i) & e(A, \hat{g}) &= e(g_z, \hat{Z}) \cdot e(g, \hat{R}) \cdot \prod_{i = 1}^\ell e(g_i, \hat{M}_i) 
+    \end{align*}
+  \end{enumerate}
+\end{description}

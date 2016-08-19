@@ -8,7 +8,6 @@
 
 \author{Qian Chen \and Supervisors: Beno\^it Libert, Fabien Laguillaumie \and Aric Lip ENS Lyon}
 
-\date{20 Auguest 2016}
 
 \maketitle
 
@@ -33,7 +32,7 @@
 \section{Using the trapdoor commitment scheme to construct efficient structure preserving publicly verifiable CCA-2 encryption scheme}
 \input{SPPE}
 
-\section{Combine Structure Perserving Public Encryption scheme with LHSPS and Groth-Sahai proof}
+\section{Combine Structure Perserving Public Encryption scheme with LHSPS and WI-NIZK proof}
 \input{RCCA2}
 
 \begin{section}{Conclusion}
@@ -46,11 +45,30 @@
 
 \begin{appendices}
   
-\begin{section}{Details of the rerandomization algorithm of RCCA encryption by Chase \etal\cite{DBLP:conf/eurocrypt/ChaseKLM12}}
-  \label{Rerandomization}
-  \input{appendRerand.tex}
+  \begin{section}{The instantiation of Linearly Homomorphic Structure Preserving Signature(LHSPS) based on the DP assumption}
+    \input{appendLHSPS}
+  \end{section}
+
+  \begin{section}{The instantiation of Structure-Preserving Commitment(SPC) based on the DP assumption}
+    \label{SPC}
+    \input{appendSPC}
+  \end{section}
+  
+  
+  \begin{section}{Details of the rerandomization algorithm of RCCA encryption by Chase \etal~\cite{DBLP:conf/eurocrypt/ChaseKLM12}}
+    \label{Rerandomization}
+    \input{appendRerand.tex}
+  \end{section}
+  
+\begin{section}{Instantiation of Chase \etal based on the SXDH assumption}
+  \label{chaseSXDH}
+  \input{appendSXDH}
 \end{section}
 
+\begin{section}{Proof of the CCA2 security of the Public Verifiable Structure-Preserving Encryption scheme}
+  \label{ProofSPPE}
+  \input{appendProofSPPE}
+\end{section}
 
 \end{appendices}
 

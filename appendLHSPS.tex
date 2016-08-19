@@ -1,0 +1,37 @@
+
+\label{LHSPS}
+We give as follows an concrete instantiation of the LHSPS proposed by Libert \etal~\cite{DBLP:conf/crypto/LibertPJY13} which is used in our construction.
+  
+\begin{description}
+\item[\boldmath{$LHSPS.\Setup(1^{\lambda})$}]:
+  \begin{enumerate}
+  \item We generate a bilinear group system $(\G, \hat{\G}, \G_T, e:\G \times \hat{\G} \to \G_T)$.
+  \item Choose random group generators $(\hat{g}_z, \hat{g}_r) \sample \hat{\G}^2$.
+  \item Choose random group generator $g \sample \G$.
+  \item Output $\PPP = (\hat{g}_z, \hat{g}_r, g)$.
+  \end{enumerate}
+\item[\boldmath{$LHSPS.\KeyGen(\PPP)$}]:
+  \begin{enumerate}
+  \item Generate $(\{\hat{\chi}_i, \hat{\gamma}_i\}_{i =1 }^k, \hat{\zeta}, \hat{\rho}) \sample \mathbb{Z}_p^{2k+2}$.
+  \item Compute for $i \in \{1, \dots, k\}$, $\hat{g}_i \gets \hat{g}_z^{\hat{\chi}_i}\hat{g}_r^{\hat{\gamma}_i}$.
+  \item Output $\vk = (\{\hat{g}_i\}_{i=1}^k) \in \hat{\G}^{k}$ and $\sk = (\{\hat{\chi}_i, \hat{\gamma}_i\}_{i=1}^k) \in \mathbb{Z}_p^{2k}$.
+  \end{enumerate}
+\item[\boldmath{$LHSPS.\Sig(\sk, \{m_1, \dots, m_k\})$}]: where $(m_1, \dots, m_k) \in \G^k$
+  \begin{enumerate}
+  \item Parse $\sk$ with $(\{\hat{\chi}_i, \hat{\gamma}_i\}_{i = 1}^k)$.
+  \item Compute
+    \begin{align*}
+      z &= \prod_{i=1}^km_i^{\hat{\chi}_i} & r &= \prod_{i =1}^km_i^{\hat{\gamma}_i} 
+    \end{align*}
+  \item Output the signature $\sigma = (z, r)$
+  \end{enumerate}
+
+\item[\boldmath{$LHSPS.\Verif(\vk, \sigma, \{m_1, \dots, m_k\})$}]:
+  \begin{enumerate}
+  \item Parse the signature $\sigma$ with $\sigma = (z, r)$ and the verification key $\vk$ with $\vk = (\hat{g}_1, \dots, \hat{g}_k)$
+  \item Verify the pairing equation:
+    \begin{align*}
+      e(z, \hat{g}_z) \cdot e(r, \hat{g}_r) &=  \cdot \prod_{i = 1}^ke(m_i, \hat{g}_i)
+    \end{align*}
+  \end{enumerate}
+\end{description}

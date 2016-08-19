@@ -7,23 +7,29 @@ As one of the most useful cryptographic protocol, the encryption scheme is widel
 Thus we are motivated to define the most adapted security notion for different encryption schemes. 
 From the very basic One-Wayness Chosen-Plaintext Attack(OW-CPA) model which means with the ciphertext no one can get the original message
 to the most secure Indistinguishable Chosen-Ciphertext Attack(IND-CCA) model
-in which no one can distinguish with a non-negligible probability ciphertext of two different messages even with access to the decryption oracle(except the trivial case in which the adversary require the oracle to decrypt the ciphertext which is required to distinguish). 
+in which no one can distinguish with non-negligible probability ciphertext of two different messages even with access to the decryption oracle(except the trivial case in which the adversary require the oracle to decrypt the ciphertext which is required to distinguish). 
 
 One of the most important property of the encryption scheme is the malleability, 
-which means with a valid ciphertext $c$ corresponded to the message $m$ we can produce another ciphertext $c'$ of a plaintext $T(m)$ which is related to the original one with the function $T$ without knowing $m$.
-However, there exits a trivial IND-CCA type attack for a such encryption scheme: we can re-randomize the ciphertext and ask the decryption oracle to decrypt the new ciphertext, then we can easily distinguish which message is corresponded to the given ciphert-text.
+which means with a valid ciphertext $c$ corresponding to the message $m$ we can produce another ciphertext $c'$ of a plaintext $T(m)$ which is related to the original one with the function $T$ without knowing $m$.
+However, there exits a trivial IND-CCA type attack for a such encryption scheme: given the ciphertext $C$ of one of the messages $m_0, m_1$, we can choose a function $T$ such that $T(m_0) \neq T(m_1)$,
+then modify the ciphertext and ask the decryption oracle to decrypt the new ciphertext $C$ corresponding to the plaintext $T(m_b)$ where $b \in \{0,1\}$ is choosen by the challenger unknow to us,
+then as $T(m_0) \neq T(m_1)$ we can easily distinguish which message is corresponded to the given cipherttext.
 
 \subsection*{Problem studied}
 My internship focused on encryption schemes which are only allowed to be rerandomizable.
 This property can be formally defined as resistant to Replayable Chosen-Ciphertext Attack(RCCA).
-Some works on construction of more complex cryptographic system like mix network proposed by Golle~\etal~\cite{DBLP:conf/ctrsa/GolleJJS04} needs RCCA encryption scheme.
-In the mix network voting system, each voter vote create a ballot and submit them to the server, then //TODO
+In the voting system,
+the adversary may want to force the voter to provide a proof of the message of its own vote.
+But if before publish the votes the server(who collect all the votes) re-randomizes all the votes,
+then even the voter can not prove the message with its randomness.
+Thus the adversary can not any more achieve its goal.
+
 However, the previous constructions~\cite{DBLP:conf/ctrsa/GolleJJS04} suffered from the Chosen-Chipertext attack or based on some non standard assumptions~\cite{DBLP:conf/crypto/PrabhakaranR07} or not very efficient~\cite{DBLP:conf/eurocrypt/ChaseKLM12}.
 The aim of my internship is to construct and prove with standard and well studied assumptions efficient encryption scheme which verifies the RCCA security.
 We try to improve the efficiency to get some usable protocol in the practical point of view.
 
 \subsection*{Proposed Contributions}
-In our constructions, all the ciphertext are elements in two groups $\G$ and $\hat{G}$.
+In our constructions, all the ciphertexts are elements in two groups $\G$ and $\hat{G}$.
 The size of one element in $\hat{\G}$ is approximately two times the size of one element in $\G$.
 The contributions of my internship are the following:
 We first give an efficient instantiation of the general controlled-malleable encryption scheme proposed by~\cite{DBLP:conf/eurocrypt/ChaseKLM12} which ciphertext has $93\G$ elements(or $49\G \times 20\hat{G}$ elements).
@@ -39,7 +45,7 @@ And we also give their efficiency by measuring their ciphertext size and compari
 
 \subsection*{Summary and Future Work}
 During my internship, I have proposed several efficiency improvements for the construction of the cryptographic scheme.
-This contribution can be considered as improvements both in the efficiency and the constructions of the new scheme with some practical properties for the further constructions of more complex cryptographic system.
+This contribution can be considered as improvements both in the efficiency and the constructions of the new schemes with some practical properties for the further constructions of more complex cryptographic systems.
 
 However, several questions are left open. 
 We especially studied the re-randomizable encryption scheme, which is a subset of homomorphic encryption scheme.

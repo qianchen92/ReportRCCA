@@ -1,4 +1,5 @@
-For construct a rerandomizable encryption scheme, we combine the previous CCA2 encryption scheme with the LHSPS signature. Then we achieve a computational unlinkable RCCA encryption scheme.
+As mentioned in the previous secion,
+in order to construct a rerandomizable encryption scheme, we combine the previous CCA2 encryption scheme with the LHSPS signature. Then we achieve a computational unlinkable RCCA encryption scheme.
 
 \begin{description}
 \item[\boldmath{$RCCA2.\KeyGen(1^\lambda)$}]:
@@ -135,7 +136,7 @@ For construct a rerandomizable encryption scheme, we combine the previous CCA2 e
       C_0^* &= m_b \cdot X^{\theta^*} & C_1^* &= g_1^{\theta^*} & C_2^* &= g_2^{\theta^*}.
     \end{align*}
 
-    The adversary has the access to the decryption oracle expect the ciphertext $\vec{C}$ corresponded to the plaintext $m_0$ or $m_1$.
+    The adversary has the access to the decryption oracle expect the ciphertext $\vec{C}$ corresponding to the plaintext $m_0$ or $m_1$.
 
     At the end, the adversary outputs a bit $b'$, its advantage against the RCCA security game is defined by the winning probability of $S_0 = |\PR[b' = b] - \frac{1}{2}|$.
 
@@ -149,7 +150,7 @@ For construct a rerandomizable encryption scheme, we combine the previous CCA2 e
 
     Since $\vec{u}_2$ always distributed uniformly over $\hat{\G}^2$, this change does not affect the view of the adversary. Thus we have $S_2 = S_1$.
 
-  \item[\textsf{Game} $3$ :] In this game, we change the public parameter $\PPP_{GS}$ of the underlying Groth-Sahai proof system to the perfect binding setting. Due to the witness indistinguishable property, we have $|S_3 - S_2| \leq adv_{\mathcal{B}}^{wit-IND}(\lambda)$.
+  \item[\textsf{Game} $3$ :] In this game, we change the public parameter $\PPP_{GS}$ of the underlying Groth-Sahai proof system to the perfect binding setting. Due to the setup-indistinguishable property, we have $|S_3 - S_2| \leq adv_{\mathcal{B}}^{SETUP-IND}(\lambda)$.
 
   \item[\textsf{Game} $4$ :] In this game, we define a failure event $F_4$: the ciphertext submitted by the adversary to the decryption oracle during the first query phase(before the challenge phase) contains the commitment $\vec{C}_{\com}$ which verifies $\com = \com^*$.
 
@@ -161,7 +162,7 @@ For construct a rerandomizable encryption scheme, we combine the previous CCA2 e
 
     And if $F_5$ occurs, we can easily construct an adversary $\mathcal{B}$ of the target collision-resistance of the underlying structure-preserving trapdoor commitment $TC$ which contradicts the Double Pairing assumption.
 
-    Thus we have $|S_5 - S_4| \leq \PR[F_2] \leq adv_{\mathcal{B}}^{TCR-CR}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$. 
+    Thus we have $|S_5 - S_4| \leq \PR[F_5] \leq adv_{\mathcal{B}}^{TCR-CR}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$. 
 
   \item[\textsf{Game} $6$ :] We modify again the decryption oracle during the second query phase. During the second query phase, the ciphertext submitted by the adversary contains $(\vec{C}_\com, \vec{C}_\open)$ such that $\com = \com^*$ and $\open = \open^*$ but $(C_0, C_1, C_2)$ does not verify that $(C_0/ C_0^*, C_1/C_1^*, C_2/C_2^*) \in Span((X, g_1, g_2))$ and pass all other verification, we denote this event $F_6$. If $F_6$ occurs, the experiment halts and outputs a random bit. Thus we have $|S_6 - S_5| \leq \PR[F_6]$. The event $F_6$ is contradict the strong unforgeability of the underlying LHSPS signature(The GS proof is in the perfect binding setting, if $F_6$ occurs, we can extract a signature which is not in the subspace $Span((g, C_0, C_1, C_2), (a, X, g_1, g_2))$). Thus we have $|S_6 - S_5| \leq adv_{\mathcal{B}}^{SUF-OTLHS}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$.
     
@@ -172,14 +173,14 @@ For construct a rerandomizable encryption scheme, we combine the previous CCA2 e
       \vec{u}_1 &= (\hat{g}^{\rho_u}, \hat{h}^{\rho_u}) \cdot (1, \com^{-1}) \in \hat{\G}^2
     \end{align*}
 
-    Since the Challenger does not use $\rho_u$ or $\rho_u'$ in the security game, thus an adversary who can make difference between \textsf{Game} $6$ and \textsf{Game} $7$, is an adversary agains the DDH assumption in $\hat{\G}$. Thus we have $|S_6 - S_5| \leq adv_{\mathcal{B}}^{DDH}(\lambda)$.
+    Since the Challenger does not use $\rho_u$ or $\rho_u'$ in the security game, thus an adversary who can make difference between \textsf{Game} $6$ and \textsf{Game} $7$, is an adversary agains the DDH assumption in $\hat{\G}$. Thus we have $|S_7 - S_6| \leq adv_{\mathcal{B}}^{DDH}(\lambda)$.
 
   \item[\textsf{Game} $8$ :] In this game, instead of generate the proof $(\vec{\pi}_{\theta^*, 1, 1}, \vec{\pi}_{\theta^*, 2, 1})$ using the witness $\theta^*$, we generate a random value $r \sample \mathbb{Z}_p^*$ and generate $(\vec{C}_{\theta^*}, \vec{\pi}_{\theta^*,1,1}, \vec{\pi}_{\theta^*,2,1})$ as following:
     \begin{align*}
       \vec{C}_{\theta^*} &= \vec{u}_1^r & \vec{\pi}_{\theta^*,1,1} &= g_1^r \cdot C_1^{*-\rho_u} & \vec{\pi}_{\theta^*,2,1} &= g_2^r \cdot C_2^{*-\rho_u}
     \end{align*}
 
-    Notice that even the proof elements are generated without using the witness $\theta^* = log_{g_1}(C_1^*) = log_{g_2}(C_2^*)$. The distribution of the proof is remain the same as in the original proof. In fact, let us define $\tilde{r} = r - \rho_u \cdot \theta^*$, we have:
+    Notice that even the proof elements are generated without using the witness $\theta^* = log_{g_1}(C_1^*) = log_{g_2}(C_2^*)$, the distribution of the proof is still remain the same as in the original proof. In fact, let us define $\tilde{r} = r - \rho_u \cdot \theta^*$, we have:
     \begin{align*}
       \vec{C}_{\theta}^* &= \vec{u}_{\com}^{\theta^*} \cdot \vec{u}_1^{\tilde{r}} &  \vec{\pi}_{\theta^*,1,1} &= g_1^{\tilde{r}} & \vec{\pi}_{\theta^*,2,1} &= g_2^{\tilde{r}}
     \end{align*}
@@ -212,12 +213,11 @@ For construct a rerandomizable encryption scheme, we combine the previous CCA2 e
   For summary, we have
   \begin{align*}
     adv_{\mathcal{A}}^{RCCA}(\lambda) &= S_0\\
-    &\leq S_{10} + 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{wit-IND}(\lambda)\\
-    &= 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{wit-IND}(\lambda) \in negl(\lambda)
+    &\leq S_{10} + 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{SETUPS-IND}(\lambda)\\
+    &= 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p + adv_{\mathcal{B}}^{SETUP-IND}(\lambda) \in negl(\lambda)
   \end{align*}
 \end{proof}
 
 
-Compare our RCCA encryption scheme to the RCCA encryption schem of Chase \etal~\cite{DBLP:conf/eurocrypt/ChaseKLM12}, our scheme is more efficient than theirs
+Compare our RCCA encryption scheme to the RCCA encryption schem of Chase \etal~\cite{DBLP:conf/eurocrypt/ChaseKLM12}, our scheme is more efficient than theirs.
 
-\input{proofRCCA2}

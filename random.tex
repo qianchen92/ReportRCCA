@@ -1,4 +1,9 @@
-For the simplicity, we choose the symmetric setting of the bilinear group and our construction is based on the DLIN assumption.
+There already exists some constructions of the Controlled-Malleable encryption scheme~\cite{DBLP:conf/eurocrypt/ChaseKLM12} which can be seen as a general case of the RCCA encryption scheme.
+However, these general constructions did not give the full instantiation of the scheme, thus it is very difficult to measure their efficiency.
+We give in this section the full instantiation of their scheme based on the DLIN assumption, and also give in the Appendix~\ref{chaseSXDH} an instantiation based on the SXDH assumption. 
+
+For the simplicity, we choose in this section the symmetric setting of the bilinear group and our construction is based on the DLIN assumption.
+And in the equations to prove, the variables are represented in a square.
 
 \begin{description}
 \item[\boldmath$RCCA1.\Setup(\lambda)$:] This algorithm generates the public and secret keys of our RCCA encryption scheme.
@@ -7,7 +12,9 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
   \item Choose a random group generator $d \in \G$.
   \item Choose $g_1,g_2 \sample \G$ and set $\vec{g}_1 = (g_1,1,g) \in \G^3$, $\vec{g}_2 = (1,g_2,g) \in \G^3$ and $\vec{g}_3 \sample \G^3$.
   \item Set up the keys for the underlying encryption scheme $\pk_{enc} = (f,g,h)$ and $\sk_{enc} = (x,y)$.
-  \item Choose four random group generators $(g_z, g_r, h_z, h_u)$ and twelve random exponents $\{\chi_i, \gamma_i, \delta_i\}_{i = 1}^3, \zeta, \rho, \phi \sample \Z_p$, then compute $(g_i,h_i) = (g_z^{\chi_i}g_r^{\gamma_i}, h_z^{\chi_i}h_u^{\delta_i})$ for $ i \in \{1,2,3\}$ and $(\alpha,\beta) = (g_z^\zeta g_r^\rho, h_z^\zeta h_u^\phi)$
+  \item Choose four random group generators $(g_z, g_r, h_z, h_u)$ and twelve random exponents
+    $$\{\chi_i, \gamma_i, \delta_i\}_{i = 1}^3, \zeta, \rho, \phi \sample \Z_p$$,
+    then compute $(g_i,h_i) = (g_z^{\chi_i}g_r^{\gamma_i}, h_z^{\chi_i}h_u^{\delta_i})$ for $ i \in \{1,2,3\}$ and $(\alpha,\beta) = (g_z^\zeta g_r^\rho, h_z^\zeta h_u^\phi)$
   \item Set up the keys for the underlying signature scheme
     $$\vk_{sig} = (g_z, h_z, g_r, h_u, \{g_i, h_i\}_{i = 1}^3, \alpha ,\beta)$$
     and
@@ -16,7 +23,7 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
   \item $\SK = (x, y)$
   \end{enumerate}
 
-\item[\boldmath$RCCA1.\Enc(\PK,m)$:] This algorithm takes as input a message and the public key of the underlying encryption scheme, outputs the corresponded ciphertext of our RCCA encryption scheme.
+\item[\boldmath$RCCA1.\Enc(\PK,m)$:] This algorithm takes as input a message and the public key of the underlying encryption scheme, outputs the corresponding ciphertext of our RCCA encryption scheme.
   \begin{enumerate}
   \item Choose two random exponents $(\theta_1, \theta_2) \sample \Z_p$ and compute $ \vec{r} = (\theta_1, \theta_2)$.
   \item Compute the ciphertext $\vec{C} = (C_1, C_2, C_3)$:
@@ -24,12 +31,12 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
       C_1 &= f^{\theta_1} & C_2 &= g^{\theta_2} & C_3 &= m \cdot h^{\theta_1+\theta_2}
     \end{align*}
 
-  \item Recall that we want prove the knowledge of the witness $\vec{w} = (m, \vec{r}, \vec{D}, \vec{S}, \vec{\sigma})$ which verifies that
+  \item Prove the knowledge of the witness $\vec{w} = (m, \vec{r}, \vec{D}, \vec{S}, \vec{\sigma})$ which verifies that
     \begin{align*}
       Enc_{BBS}(pk_{enc}, m; \vec{r}) = \vec{C} \vee (\vec{C} = ReRand(\vec{D}; \vec{S}) \wedge Verify(vk_{sig}, \vec{D}) = \True)
     \end{align*}
     
-  \item Define the bit $b = 1$ and a Groth-Sahai commitment $\vec{C}_b = (1,1,d^b)\cdot \vec{g}_1^{r_b} \cdot \vec{g}_2^{s_b} \cdot \vec{g}_3^{t_b}$ and also a $NIWI$ proof $\pi_b \in \G^6$ of the pairing product equation 
+  \item Define the bit $b = 1$ and a commitment $\vec{C}_b = (1,1,d^b)\cdot \vec{g}_1^{r_b} \cdot \vec{g}_2^{s_b} \cdot \vec{g}_3^{t_b}$ and also a $WI-NIZK$ proof $\pi_b \in \G^6$ of the pairing product equation 
   
   \begin{align}
   e(d,\boxed{d^b}) &= e(\boxed{d^b},\boxed{d^b}) \tag{1}
@@ -37,7 +44,7 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
   
   which ensures that $b \in \{0,1\}$.
 
-    %  \item Then generate commitements $\{\vec{C}_{\Gamma_i}\}_{i = 1}^3$ of the variables $\Gamma_i = C_i^b$ for $i \in \{1,2,3\}$ and the corresponded proofs:
+    %  \item Then generate commitements $\{\vec{C}_{\Gamma_i}\}_{i = 1}^3$ of the variables $\Gamma_i = C_i^b$ for $i \in \{1,2,3\}$ and the corresponding proofs:
     %    \begin{align}
     %      e(C_i,\boxed{h^b}) &= e(h, \boxed{\Gamma_i}) ,&
     %      \forall i \in \{1,2,3\}
@@ -92,7 +99,7 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
     
   \item We put all these proofs together to get $\vec{\pi}$.
   \item The ciphertext of the RCCA-scheme is
-    $$(\vec{C} = (C_1, C_2, C_3), \vec{C}_{H}, \vec{C}_{d^b}, \vec{C}_{M}, \{\vec{C}_{R_1}\}_{i= 1}^2, \{\vec{C}_{D_i}\}_{i = 1}^3, \{\vec{C}_{S_i}\}_{i = 1}^2, \{\vec{C}_{\Sigma_i}\}_{i = 1}^3,\{\vec{C}_{\Delta_i}\}_{i=1}^3, \vec{C}_F, \vec{C}_G, \vec{\pi})$$
+    $$(\vec{C} = (C_1, C_2, C_3), \vec{C}_{H}, \vec{C}_{d^b}, \vec{C}_{M}, \{\vec{C}_{R_1}\}_{i= 1}^2, \{\vec{C}_{D_i}\}_{i = 1}^3, \{\vec{C}_{S_i}\}_{i = 1}^2, \{\vec{C}_{\Sigma_i}\}_{i = 1}^3,\{\vec{C}_{\Delta_i}\}_{i=1}^3, \vec{C}_F, \vec{C}_G, \vec{\pi}) \in \G^{93}$$
     
   \end{enumerate}
 
@@ -108,6 +115,16 @@ For the simplicity, we choose the symmetric setting of the bilinear group and ou
   \input{rerandomization}
 
 \end{description}
+
+The following theorems have been proven in~\cite{DBLP:conf/eurocrypt/ChaseKLM12}
+
+\begin{myTh}
+  $RCCA1$ verifies the correctness of the encryption scheme under DLIN assumption.
+\end{myTh}
+
+\begin{myTh}
+  $RCCA1$ is a RCCA secure encryption scheme under DLIN assumtption.
+\end{myTh}
 
 
 %\input{proofs}
