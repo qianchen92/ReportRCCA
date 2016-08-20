@@ -146,9 +146,19 @@ Then we give some building blocks and present the security model and proprieties
     \item[$\boldmath{SPC.\Verif(\PPP,\ck, \vec{m}, \com, \open) \to \{\True, \False\}}$]:  This algorithm takes the $\PPP, \ck, \vec{m}, \com, \open$ and outputs $\True$ or $\False$.
     \end{description}
 
-    The correctness and structure-preserving property of the commit scheme is defined as follows:
+    The correctness, binding, hiding and structure-preserving property of the commit scheme is defined as follows:
     \begin{enumerate}
     \item (Correctness) For all message $m$, commitment $\com$ and open $\open$ generated as $(\com, \open) \gets SPC.\Com(\PPP, \ck, \vec{m})$, the verification algorithm $SPC.\Verif(\PPP,\ck, \vec{m}, \com, \open)$ outputs $\True$.
+
+    \item(Binding) We define the advantage of the adversary as
+      $$adv(\Adv_{Binding}) = \PR[(m, m', \open, \open') \gets \Adv_{Binding}| \exists c \st \Verif(c,m, \open) = True \wedge \Verif(c, m', \open') = \True \wedge m \neq m'].$$
+      The commitment scheme is binding if no PPT adversary has non-negligible advantage.
+
+      Especially, if $\not \exists (m, m', \open, \open', c) \st \Verif(c,m, \open) = True \wedge \Verif(c, m', \open') = \True \wedge m \neq m'$, then we say the commitment scheme is perfect binding.
+
+    \item(Hiding) We define the algorithm $ComOpen(\PPP, \ck, \open, m) \to \com$ which verifies that for all messages $m$, if $SPC.\Com(\PPP, \ck, \vec{m}) \to (\com*, \open*)$ then $ComOpen(\PPP, \ck, \open*, m) \to \com*$.
+
+      A commitment scheme is \resp perfect, statistical, computational hiding iff for all $\open$ and all messages $(x, x') \st x \neq x'$ the distribution $ComOpen(\PPP, \ck, \open, m)$ is \resp equal, statistically close, computationally close 
       
     \item (Structure-Preserving) As for LHSPS, a commitment scheme is structure-preserving if all the commitment keys, commitments and opens are group elements and there is no hash function in the algorithms. 
     \end{enumerate}
@@ -189,7 +199,7 @@ Then we give some building blocks and present the security model and proprieties
 
       The soundness and witness-indistinguishability is defined as follows:
       \begin{enumerate}
-      \item (Soundness) The proof system is sound iff $\Verif(\PPP, \pi, m) \to \True$ implies $m \in \mathcal{R}$.
+      \item (Soundness) The proof system is sound iff for all adversary $\PR[(\pi) \gets \Adv(\PPP, m)| \Verif(\PPP, \pi, m) = \True \wedge m \not \in \mathcal{R}]$ is negligible(the proof system is perfect sound if this probability equals to $0$).
       \item (Witness-Indistinguishability) For $(w_0, w_1)$ both are witness of the fact that $m \in \mathcal{R}$. Then the two proofs $\pi_0, \pi_1$ generated $\pi_i \gets \Prove(\PPP, m, w_i)$ for $i \in \{0,1\}$ are indistinguishable.
       \end{enumerate}
       
@@ -197,11 +207,22 @@ Then we give some building blocks and present the security model and proprieties
       
     \end{myDef}
 
-  
-    In this work, we consider the Groth-Sahai proof system as our WI-NIZK.
 
-    //TODO: Present Groth-Sahai proof system.
-  
+    \paragraph{Groth-Sahai Proof system}
+    In this work, we consider the Groth-Sahai(GS) proof system~\cite{DBLP:journals/eccc/GrothS07} as our WI-NIZK.
+
+    For the simplicity, we present here the instantiation based on the DLIN assumption in symmetric pairing groups $(\G, \G_T)$. However the similar instantiation based on the SXDH assumption in asymmetric pairing groups $(\G, \hat{\G}, \G_T)$ also exits. And in the following description, for two group vectors with same length $\vec{A}, \vec{B}$, $\vec{A} \cdot \vec{B}$ represents the product component by component.
+    
+    In the Groth-Sahai proof system the common reference string(or the public parameter) is defined by three group vectors $\vec{g}_1, \vec{g}_2, \vec{g}_3 \in \G^3$, where $\vec{g}_1 = (g_1, 1, g) \in \G^3$ and $\vec{g}_2 = (1, g_2, g)$ for some $(g_1, g_2, g) \in \G^3$. A commitment to $X \in \G$ is defined as $(1, 1, X) \cdot \vec{g}_1^{r_X} \cdot \vec{g}_2^{s_X} \cdot \vec{g}_3^{t_X}$ for $(r_x, s_X, t_x) \in \mathbb{Z}_p^3$ generated randomly.
+
+    This proof system can be both perfectly sound or statistically witness indistinguishable depending of the vector $\vec{g}_3$.
+    \begin{enumerate}
+    \item If $\vec{g}_3$ is in the space span by $\vec{g}_1, \vec{g}_2$ which means $\exists (\xi_1, \xi_2) \in \mathbb{Z}_p^2 \st \vec{g}_3 = \vec{g}_1^{\xi_1} \cdot \vec{g}_2^{\xi_2}$, then the proof system is perfectly sound and the commitment is perfectly binding.
+    \item If $\vec{g}_3$ is linearly independent with $\vec{g}_2, \vec{g}_3$. Then the GS commitment is perfectly hiding, and the proof system is witness-indistinguishable under the DLIN assumption.
+    \end{enumerate}
+
+    Notice that for the GS proof system, it is indistinguishable between the two settings under the DLIN assumtpion. 
+    
 
 \end{subsection}
 
