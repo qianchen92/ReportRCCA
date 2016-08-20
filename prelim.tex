@@ -209,7 +209,7 @@ Then we give some building blocks and present the security model and proprieties
 
 
     \paragraph{Groth-Sahai Proof system}
-    In this work, we consider the Groth-Sahai(GS) proof system~\cite{DBLP:journals/eccc/GrothS07} as our WI-NIZK.
+    In this work, we consider the Groth-Sahai(GS) proof system~\cite{DBLP:journals/eccc/GrothS07} as our WI-NIZK. Which is a WI-NIZK proof system of pairing equations(the only operations allowed is pairing and product between group elements).
 
     For the simplicity, we present here the instantiation based on the DLIN assumption in symmetric pairing groups $(\G, \G_T)$. However the similar instantiation based on the SXDH assumption in asymmetric pairing groups $(\G, \hat{\G}, \G_T)$ also exits. And in the following description, for two group vectors with same length $\vec{A}, \vec{B}$, $\vec{A} \cdot \vec{B}$ represents the product component by component.
     
@@ -222,7 +222,8 @@ Then we give some building blocks and present the security model and proprieties
     \end{enumerate}
 
     Notice that for the GS proof system, it is indistinguishable between the two settings under the DLIN assumtpion. 
-    
+
+    To proof the commitments satisfy certain equations, the GS proof system needs one commitment per variable and one proof per equation, the size of the equation depends on the type of pairing equations.
 
 \end{subsection}
 

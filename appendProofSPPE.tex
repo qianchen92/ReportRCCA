@@ -120,5 +120,11 @@
   \end{align*}
 
   As $x_2$ is completely independent of the adversary's view, $C_0$ can be seen as a one-time pad of the message $m_b$. Thus the adversary does not have any information about the bit $b$. Then we have $S_{10} = 0$.
+For summary, we have
+\begin{align*}
+  adv_{\mathcal{A}}^{CCA2}(\lambda) &= S_0\\
+  &\leq S_{10} + 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p\\
+  &= 2 \cdot adv_{\mathcal{B}}^{DDH}(\lambda) + 2 \cdot adv_{\mathcal{B}}^{DP}(\lambda) + q_D/p \in negl(\lambda)
+\end{align*}
 
 \end{proof}

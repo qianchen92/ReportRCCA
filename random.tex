@@ -123,8 +123,19 @@ The following theorems have been proven in~\cite{DBLP:conf/eurocrypt/ChaseKLM12}
 \end{myTh}
 
 \begin{myTh}
-  $RCCA1$ is a RCCA secure encryption scheme under DLIN assumtption.
+  $RCCA1$ is a RCCA secure encryption scheme under DLIN assumtption with statistical re-randomization.
 \end{myTh}
 
 
+The correctness of the scheme is staightforward by the structure of the encryption part. Indeed if we do not look at proof part(which the honest encryptor can always generate a valid proof), the ciphertext is a BBS~\cite{DBLP:conf/crypto/BonehBS04} encryption.
+
+For the security proof of RCCA:
+Recall that we have proved the following statement
+\begin{align*} 
+  Enc_{BBS}(pk_{enc}, m; \vec{r}) = \vec{C} \vee (\vec{C} = ReRand(\vec{D}; \vec{S}) \wedge Verify(vk_{sig}, \vec{D}) = \True)
+\end{align*}
+intuitively we can pass the the Groth-Sahai proof system to the witness-indistinguishable setting, then during the chanllenge phase,
+the challenger generates the ciphertext as before except that it use the singing key to generate a signature and use the right part of the OR statement to generate a valid proof.
+However in this setting if an adversary can produce any encryption other than the rerandomization, it contradicts the strongly unforgeability of the underlying one-time signature.
+This provides us a distinguisher of the Groth-Sahai settings.
 %\input{proofs}
