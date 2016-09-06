@@ -58,7 +58,7 @@ To compare with our construction, we also give in this section an instantiation 
     \begin{enumerate}  
     \item The $ReRand$ component: define $(D_1, D_2) = (1_\G, 1_\G)$ and $S = 1_\G$.
     \item Remind that actually these variables are of the following forms in the security proof, but in the case $b=1$ they all become $1_\G$.
-      $$(D_1, D_2, D_3) = (f^{(\theta_1+\theta_1')\cdot (1-b)}, m^{1-b} \cdot g^{(\theta_2+\theta_2')\cdot (1-b)}$$
+      $$(D_1, D_2) = (f^{(\theta_1+\theta_1')\cdot (1-b)}, m^{1-b} \cdot g^{(\theta_2+\theta_2')\cdot (1-b)}$$
       and $$S_1 = d^{\theta_1'\cdot (1-b)}$$
     \item Then compute the commitments $\{\vec{C}_{D_i}\}_{i=1}^2$ of $\{D_i\}_{i= 1}^2$ and $\vec{C}_{\hat{S}}$ commitments of $\hat{S}$.
     \item And also compute the proofs of following equations:
@@ -91,13 +91,13 @@ To compare with our construction, we also give in this section an instantiation 
     
   \item We put all these proofs together to get $\vec{\pi}$.
   \item The ciphertext of the RCCA-scheme is
-    $$(\vec{C} = (C_1, C_2, C_3), \vec{C}_{d^b}, \vec{C}_{\hat{d}^b}, \vec{C}_{M}, \vec{C}_{\hat{R}}, \{\vec{C}_{D_i}\}_{i = 1}^2, \vec{C}_{\hat{S}}, \{\vec{C}_{\Sigma_i}\}_{i = 1}^2,\{\vec{C}_{\Delta_i}\}_{i=1}^2, \vec{C}_F, \vec{C}_G, \vec{\pi}) \in 49\G \times 20 \hat{\G}$$
+    $$(\vec{C} = (C_1, C_2), \vec{C}_{d^b}, \vec{C}_{\hat{d}^b}, \vec{C}_{M}, \vec{C}_{\hat{R}}, \{\vec{C}_{D_i}\}_{i = 1}^2, \vec{C}_{\hat{S}}, \{\vec{C}_{\Sigma_i}\}_{i = 1}^2,\{\vec{C}_{\Delta_i}\}_{i=1}^2, \vec{C}_F, \vec{C}_G, \vec{\pi}) \in 49\G \times 20 \hat{\G}$$
     
   \end{enumerate}
 
 \item[\boldmath{$RCCA3.\Dec(\PK,\SK, \vec{C})$}]:
   \begin{enumerate}
-  \item Parse $\vec{C}$ as $(C_1, C_2, C_3), \vec{C}_{d^b}, \vec{C}_{\hat{d}^b}, \vec{C}_{M}, \vec{C}_{\hat{R}}, \{\vec{C}_{D_i}\}_{i = 1}^2, \vec{C}_{\hat{S}}, \{\vec{C}_{\Sigma_i}\}_{i = 1}^2,\{\vec{C}_{\Delta_i}\}_{i=1}^2, \vec{C}_F, \vec{C}_G, \vec{\pi})$.
+  \item Parse $\vec{C}$ as $(C_1, C_2), \vec{C}_{d^b}, \vec{C}_{\hat{d}^b}, \vec{C}_{M}, \vec{C}_{\hat{R}}, \{\vec{C}_{D_i}\}_{i = 1}^2, \vec{C}_{\hat{S}}, \{\vec{C}_{\Sigma_i}\}_{i = 1}^2,\{\vec{C}_{\Delta_i}\}_{i=1}^2, \vec{C}_F, \vec{C}_G, \vec{\pi})$.
   \item Parse $\SK$ as $x$
   \item Verify that all proofs are correct.
   \item If any proof fails then return $\bot$. otherwise return $C_2/(C_1^x)$ 

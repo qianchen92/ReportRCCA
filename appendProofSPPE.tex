@@ -25,11 +25,11 @@
       C_0^* &= m_b \cdot X^{\theta^*} & C_1^* &= g_1^{\theta^*} & C_2^* &= g_2^{\theta^*}.
     \end{align*}
 
-    The adversary has the access to the decryption oracle expect the ciphertext $\vec{C}^*$ after the challenge phase.
+    The adversary has access to the decryption oracle except the ciphertext $\vec{C}^*$ after the challenge phase.
 
     At the end, the adversary outputs a bit $b'$, its advantage against the RCCA security game is defined by the winning probability of $S_0 = |\PR[b' = b] - \frac{1}{2}|$.
 
-  \item[\textsf{Game} $1$ :] In this game, the challenger generate the signing key and verification key pair and the commitment $\com^*$ of the signature's verification key at the beginning of the game. Since this does not change the view of the adversary then we have $S_0 = S_1$.
+  \item[\textsf{Game} $1$ :] In this game, the challenger generates the signing key and verification key pair and the commitment $\com^*$ of the signature's verification key at the beginning of the game. Since this does not change the view of the adversary then we have $S_0 = S_1$.
 
   \item[\textsf{Game} $2$ :] In the $\KeyGen$ algorithm, we modify the generation of the public key. Instead of generate $(\vec{u}_1, \vec{u}_2)$ as in the \textsf{Game} 0, we define:
     \begin{align*}
@@ -37,18 +37,18 @@
       \vec{u}_2 &= (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \cdot (1, (\com^*)^{-1}) \in \hat{\G}^2
     \end{align*}
 
-    Since $\vec{u}_2$ always distributed uniformly over $\hat{\G}^2$, this change does not affect the view of the adversary. Thus we have $S_2 = S_1$.
+    Since $\vec{u}_2$ is always distributed uniformly over $\hat{\G}^2$, this change does not affect the view of the adversary. Thus we have $S_2 = S_1$.
 
 
   \item[\textsf{Game} $3$ :] In this game, we define a failure event $F_4$: the ciphertext submitted by the adversary to the decryption oracle during the first query phase(before the challenge phase) contains the commitment $\com$ which verifies $\com = \com^*$.
 
-    If the event $F_3$ happens, then the experiment halts and outputs a random bit. Since $\com^*$ is chosen uniformly in the space $\hat{\G}$, and remains independent from the adversary's view until the challenge phase, then we have $|S_3 - S_2| \leq \PR[F_3] \leq q_D/p$ where $q_D$ represents the number of decryption queries before the challenge phase $p$ is the order of the group $\hat{\G}$.
+    If the event $F_3$ happens, then the experiment halts and outputs a random bit. Since $\com^*$ is chosen uniformly in the space $\hat{\G}$, and remains independent from the adversary's view until the challenge phase, then we have $|S_3 - S_2| \leq \PR[F_3] \leq q_D/p$ where $q_D$ represents the number of decryption queries before the challenge phase and $p$ is the order of the group $\hat{\G}$.
 
   \item[\textsf{Game} $4$ :] In this game, we modify the decryption oracle during the second query phase, let us denote the event $F_4$: the ciphertext submitted by the adversary to the decryption oracle during the second query phase contains the commitment and the open $(\com, \open)$ which verifies $\com = \com^*$ but $\open \neq \open^*$.
 
     The experiment halts if $F_4$ occurs and outputs a random bit. Thus we have $|S_4- S_3| \leq \PR[F_4]$.
 
-    And if $F_4$ occurs, we can easily construct an adversary $\mathcal{B}$ of the target collision-resistance of the underlying structure-preserving trapdoor commitment $SPC$ which contradicts the Double Pairing assumption.
+    And if $F_4$ occurs, we can easily construct an adversary $\mathcal{B}$ of the target collision-resistance of the underlying structure-preserving commitment $SPC$ which contradicts the Double Pairing assumption.
 
     Thus we have $|S_4 - S_3| \leq \PR[F_4] \leq adv_{\mathcal{B}}^{TCR-CR}(\lambda) \leq adv_{\mathcal{B}}^{DP}(\lambda)$.
 

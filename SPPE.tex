@@ -7,21 +7,21 @@ then replace the verification part by an rerandomizable NIZK proof, then we can 
 However, this approach needs the underlying public key encryption scheme to be structure-preserving and publicly verifiable.
 Current existing scheme with such properties is not very efficient($381\G$ group elements~\cite{DBLP:conf/pkc/AbeDKNO13}).
 
-In this section, we use the all-but-one hash proof techniques proposed by~\cite{DBLP:conf/tcc/LibertY12}. We combine it with the previous trapdoor commitment scheme and a strongly unforgeable signature scheme,using the property CMTCR (Chosen-Message Target Collision Resistant) of the trapdoor commitment scheme, we can construct a wanted CCA-2 structure preserving publicly verifiable encryption scheme.
+In this section, we use the all-but-one hash proof techniques proposed by~\cite{DBLP:conf/tcc/LibertY12}. We combine it with the previous structure-preserving commitment scheme and a strongly unforgeable signature scheme,using the property CMTCR (Chosen-Message Target Collision Resistant) of the commitment scheme, we can construct a wanted CCA-2 structure preserving publicly verifiable encryption scheme.
 \begin{description}
 
 \item[\boldmath{$SPCCA.\KeyGen(1^\lambda)$}]:
   \begin{enumerate}
-  \item Choose a asymmetric pairing group system $(\G, \hat{\G}, \G_T)$, groups of prime order $p > 2^\lambda$.
+  \item Choose an asymmetric pairing group system $(\G, \hat{\G}, \G_T)$, groups of prime order $p > 2^\lambda$.
   \item Set $\PPP$ as $(\G, \hat{\G}, \G_T)$.
   \item Choose also group generators $g_1, g_2 \sample \G$ and random values $x_1, x_2 \sample \mathbb{Z}_p$.
   \item Generate group generator $\hat{g} \sample \hat{\G}$
   \item Set $X = g_1^{x_1}g_2^{x_2}$.
   \item Choose random values $\rho_u,\rho_u' \sample \Z_p$ and random group generators $(\hat{g}, \hat{h}) \sample \hat{\G}^2$.
   \item Set $(\vec{u}_1, \vec{u}_2)$ as $\vec{u}_1 = (\hat{g}, \hat{h}) \in \hat{\G}^2$ and $\vec{u}_2 =  (\hat{g}^{\rho_u}, \hat{h}^{\rho_u'}) \in \hat{\G}^2$. Note that $\vec{u}_1$ and $\vec{u}_2$ are linearly independent with overwhelming probability.
-  \item Set $\PPP_{TC} = (\PPP, g_1, \hat{g}, \ell = 6)$.
+  \item Set $\PPP_{SPC} = (\PPP, g_1, \hat{g}, \ell = 6)$.
   \item Generate the commitment key $\vec{\ck} \in \hat{\G}^8$ and $\vec{\tk} \in \mathbb{Z}_p^8$
-  \item Define $\SK = (x_1, x_2)$ and $\PK = (g_1, g_2, \vec{u}_1, \vec{u}_2, X, \PPP_{TC}, \vec{\ck})$
+  \item Define $\SK = (x_1, x_2)$ and $\PK = (g_1, g_2, \vec{u}_1, \vec{u}_2, X, \PPP_{SPC}, \vec{\ck})$
   \end{enumerate}
 \item[\boldmath{$SPCCA.\Enc(M,\PK)$}]:
   \begin{enumerate}
@@ -31,7 +31,7 @@ In this section, we use the all-but-one hash proof techniques proposed by~\cite{
       C_0 &= M\cdot X^{\theta}, & C_1 &= g_1^{\theta}, & C_2 &= g_2^{\theta}.
     \end{align*}
   \item Generate a commitment to $\SVK = (\{\hat{g}_i\}_{i =1}^5, \hat{a})$ and let 
-    $$(\com, \open) \gets TC.\Com(\PPP_{TC}, \vec{ck}, \SVK) \in \hat{\G} \times (\G^9 \times \hat{\G}^2)$$
+    $$(\com, \open) \gets SPC.\Com(\PPP_{SPC}, \vec{ck}, \SVK) \in \hat{\G} \times (\G^9 \times \hat{\G}^2)$$
     be the resulting commitment/decommitment pair.
   \item Define vector $\vec{u}_{\com} = \vec{u}_2\cdot (1, \com)$ and the Groth-Sahai CRS $\mathbf{u}_{\com}=(\vec{u}_{\com},\vec{u}_1)$. 
   \item Pick $r \sample \mathbb{Z}_p$. Compute $\vec{C}_{\theta} = \vec{u}_{\com}^{\theta} \cdot (\vec{u}_1)^r$.
@@ -53,10 +53,10 @@ In this section, we use the all-but-one hash proof techniques proposed by~\cite{
   
 \item[\boldmath{$SPCCA.\Dec(\PK, \vec{C}, \SK)$}]:
   \begin{enumerate}
-  \item Parse $\PK$ with $(\vec{g}_1, \vec{g}_2, X, \PPP_{TC}, \ck)$ and $\SK$ with $(x_1, x_2)$.
+  \item Parse $\PK$ with $(\vec{g}_1, \vec{g}_2, X, \PPP_{SPC}, \ck)$ and $\SK$ with $(x_1, x_2)$.
   \item Parse $\vec{C}$ with $ (\SVK, \com, \open, C_0, C_1, C_2, \vec{C}_{\theta}, \vec{\pi}, \vec{\sigma})$.
   \item Verify the signature is valid $OT1.\Verif(\PPP,  (C_0, C_1, C_2, \pi_1,\pi_2), \sigma) = \True$.
-  \item Using the commitment verification algorithm to verify that $TC.\Verif(\ck, \com, \SVK, \open) = \True$
+  \item Using the commitment verification algorithm to verify that $SPC.\Verif(\ck, \com, \SVK, \open) = \True$
   \item Verify that $\vec{\pi}=(\pi_1,\pi_2)$ is a valid Groth-Sahai proof \wrt  $(C_1, C_2, \vec{C}_{\theta}, \com)$. Namely, 
     it should satisfy 
     \begin{eqnarray} \label{ver-eq} 
@@ -74,4 +74,4 @@ In this section, we use the all-but-one hash proof techniques proposed by~\cite{
 \end{myTh}
 
 
-The proof of this theorem is very similar than the proof of the next section, we give a full description of this proof in the appendix~\ref{ProofSPPE}.
+The proof of this theorem is very similar than the proof in the next section, we give a full description of this proof in the appendix~\ref{ProofSPPE}.

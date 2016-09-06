@@ -1,5 +1,12 @@
 During this internship, we explore many aspect of security proof of the cryptographic protocols
-and we have constructed and improved several existing rerandomizable encryption scheme.
+and we have constructed and improved several existing rerandomizable encryption schemes.
 And also our RCCA encryption scheme is based on the SXDH assumption which is a well studied and general believed assumption,
 this means we don't need the symmetric pairing for our construction which is not very efficient.
-However, there are many questions left open. Can we construct efficient protocol for larger family of homomorphic encryption scheme.
+However, there are many questions left open. Can we construct efficient protocol for larger family of homomorphic encryption scheme?
+Can we use the same idea to improve the efficiency but still statistical unlinkable?
+
+For the efficiency evaluation,
+our RCCA scheme is based on SXDH the ciphertext's size is $39\G + 20 \hat{\G}$,
+and the most efficient instantiation as we know is $93\G$ under the DLIN assumption and $49\G + 20\hat{\G}$ under SXDH assumption.
+However we must point out that our scheme is computational unlinkable and the previous construction by Chase \etal~\cite{DBLP:conf/eurocrypt/ChaseKLM12} is statistical unlinkable.
+And our Structure-Preserving Publicly Verifiable CCA encryption scheme has $16 \G + 11 \hat{\G}$ elements and the known most efficient such scheme has ciphertext's size as $321\G$ elements.
